@@ -1,0 +1,6 @@
+<div class="container">
+    <header class="jumbotron">
+    <app-profile *ngFor="let user of users$ | async" [user]="user"></app-profile> 
+    </header>
+  </div>
+  
