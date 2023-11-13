@@ -1,6 +1,6 @@
 {
-    "/api/users/*": {
-        "target": "http://localhost:9004",
+    "/api/*": {
+        "target": "http://localhost:9004/",
         "secure": false,
         "changeOrigin": true,
         "logLevel": "debug"
