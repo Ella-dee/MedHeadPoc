@@ -3,10 +3,16 @@ package api.com.medhead.model;
 import lombok.Data;
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Entity
-@Table(name="users")
+@Table(name="users",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "ssnumber"),
+                @UniqueConstraint(columnNames = "email")
+        })
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,6 +43,12 @@ public class User {
     @Column (name= "ssnumber")
     private String socialSecurityNumber;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(  name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
+
     public User(int id, String firstName, String lastName, String password, String address, String city, String postCode, double longitude, double latitude, String phone, String email, LocalDate birthdate, String socialSecurityNumber) {
         this.id = id;
         this.firstName = firstName;
@@ -54,5 +66,10 @@ public class User {
     }
 
     public User() {
+    }
+
+    public User(String password, String email) {
+        this.password = password;
+        this.email = email;
     }
 }
