@@ -20,7 +20,7 @@ public class JwtUtils {
     @Value("${medhead.app.jwtSecret}")
     private String jwtSecret;
 
-    @Value("${meadhead.app.jwtExpirationMs}")
+    @Value("${medhead.app.jwtExpirationMs}")
     private int jwtExpirationMs;
 
     public String generateJwtToken(Authentication authentication) {
