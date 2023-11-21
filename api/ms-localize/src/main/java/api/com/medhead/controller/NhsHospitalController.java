@@ -13,6 +13,7 @@ import com.graphhopper.util.PointList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.json.JSONException;
@@ -43,10 +44,11 @@ public class NhsHospitalController {
     public List<Hospital> getAllHospitals() throws IOException, InterruptedException, JSONException {
         return hospitalRepository.findAll();
     }
+    //test url http://localhost:9005/api/hospitals/getNearest/51.510067/0.133869
 
-    @GetMapping("getNearest")
-    public List<Hospital> getNearestHospital(Double latitude, Double longitude){
-        GraphHopper hopper = createGraphHopperInstance("src/main/resources/england-latest.osm.pbf");
+    @GetMapping("getNearest/{latitude}/{longitude}")
+    public List<Hospital> getNearestHospital(@PathVariable Double latitude, @PathVariable Double longitude){
+        GraphHopper hopper = createGraphHopperInstance("ms-localize/src/main/resources/england-latest.osm.pbf");
         List<Hospital> nearestHospitals = routing(hopper, latitude, longitude);
         // release resources to properly shutdown or start a new instance
         hopper.close();
