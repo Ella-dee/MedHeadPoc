@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @SpringBootApplication
-@ComponentScan("com.medhead.security")
+@ComponentScan
 public class MsUsersApplication
 {
     public static void main(String[] args) {
