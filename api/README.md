@@ -21,7 +21,8 @@ Puis placer le dans le module ms-localize: src/main/resources/
 
 ### Execution
 1. Dans l'éditeur de code Java, lancer l'application 'MsUsersApplication'.
-2. Dans un autre terminal, se rendre dans l'application front 'app', lancer la commande suivante :
+2. Jouer le script 'src/main/resources/sql/data.sql' dans la base de données 'medhead-users'.
+3. Dans un autre terminal, se rendre dans l'application front 'app', lancer la commande suivante :
 ```bash
 npm run start
 ```
