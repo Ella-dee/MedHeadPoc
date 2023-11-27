@@ -11,4 +11,5 @@ export class User {
   birthdate!: string;
   email!: string;
   socialSecurityNumber!: string;
+  userId!: number;
   }
