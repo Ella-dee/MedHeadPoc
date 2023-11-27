@@ -9,3 +9,65 @@ body {
     background-color: #ffffff;
     overflow-x: hidden;
   }
+
+  a,
+  a:hover,
+  a:focus {
+    text-decoration: none;
+  }
+  
+  a:hover,
+  a:focus {
+    color: initial;
+  }
+
+  .btn,
+.btn:focus {
+  outline: none !important;
+  box-shadow: none;
+}
+
+.navbar{
+  background-color: $primary1;
+}
+.navbar-brand {
+  padding: 15px 35px;
+  color: $primary2;
+  font-weight: bold;
+  font-size: larger;
+}
+
+.navbar {
+  .nav-item {
+    .nav-link {
+      padding: 3px 15px;
+      margin: 10px 15px;
+      color: $white;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    &:hover {
+      .nav-link {
+        color: $primary2;
+      }
+    }
+  }
+}
+
+.jumbotron{
+  margin-top: 3em;
+  text-align: center;
+}
+.profileHeader{
+  margin-bottom: 2em;
+}
+
+.profileDetails{
+  text-align: left;
+  margin: auto;
+}
+
+.editInfo{
+  text-align: center;
+}

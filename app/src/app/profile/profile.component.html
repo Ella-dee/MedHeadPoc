@@ -1,33 +1,8 @@
  <div class="container" *ngIf="currentUser; else loggedOut">
-    <header class="jumbotron">
-      <h3>
+    <div class="jumbotron">
+      <h3 class="profileHeader">
         <strong>{{ patient.lastName | uppercase }} {{ patient.firstName | titlecase }}</strong> 
-      </h3>
-    </header>
-    <p>
-      <strong>Email:</strong>
-      {{ currentUser.email }}
-    </p>
-    
-    <p>
-      <strong>Social Security Number:</strong>
-      {{ patient.socialSecurityNumber }}
-    </p>
-    
-    <p>
-      <strong>Birthdate:</strong>
-      {{ patient.birthdate }}
-    </p>
-    <p>
-      <strong>Adresse:</strong>
-      {{ patient.address }}, {{ patient.postCode}}, {{patient.city}}
-    </p>
-    
-    <p>
-      <strong>Phone:</strong>
-      {{ patient.phone }}
-    </p>
-    
+      </h3>    
     <!--
     <strong>Roles:</strong>
     <ul>
@@ -36,9 +11,64 @@
       </li>
     </ul>
   -->
+  <div class="col-md-8 profileDetails">
+    <div class="card mb-3">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-4">
+            <h6 class="mb-0">NHS Number</h6>
+          </div>
+          <div class="col-sm-8 text-secondary">
+            {{patient.socialSecurityNumber}}
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-4">
+            <h6 class="mb-0">Birthdate</h6>
+          </div>
+          <div class="col-sm-8 text-secondary">
+            {{patient.birthdate}}
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-4">
+            <h6 class="mb-0">Email</h6>
+          </div>
+          <div class="col-sm-8 text-secondary">
+            {{patient.email}}
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-4">
+            <h6 class="mb-0">Phone</h6>
+          </div>
+          <div class="col-sm-8 text-secondary">
+            {{patient.phone}}
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-4">
+            <h6 class="mb-0">Address</h6>
+          </div>
+          <div class="col-sm-8 text-secondary">
+            {{patient.address}}, {{patient.postCode}}, {{patient.city}}
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-12 editInfo">
+            <a class="btn btn-info ">Edit</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+    </div>
   </div>
-   
-  
   <ng-template #loggedOut>
     Please login.
   </ng-template>

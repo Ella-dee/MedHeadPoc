@@ -22,8 +22,6 @@ export class ProfileComponent implements OnInit {
     this.userService.getUserContent(this.currentUser.id).subscribe(
       (data) => {
         this.patient = data;
-        console.log("Test: patient: ", this.patient);
-        console.log("Adresse: ", this.patient.address);
       }
     );
   }
