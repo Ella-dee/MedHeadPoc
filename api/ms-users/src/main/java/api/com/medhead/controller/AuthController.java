@@ -5,10 +5,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import api.com.medhead.model.Patient;
 import api.com.medhead.payload.request.LoginRequest;
 import api.com.medhead.payload.request.SignupRequest;
 import api.com.medhead.payload.response.JwtResponse;
 import api.com.medhead.payload.response.MessageResponse;
+import api.com.medhead.repository.PatientRepository;
 import api.com.medhead.security.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,19 +38,21 @@ import jakarta.validation.Valid;
 public class AuthController {
 
     @Autowired
-    AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    RoleRepository roleRepository;
+    private RoleRepository roleRepository;
+    @Autowired
+    private PatientRepository patientRepository;
 
     @Autowired
-    PasswordEncoder encoder;
+    private PasswordEncoder encoder;
 
     @Autowired
-    JwtUtils jwtUtils;
+    private JwtUtils jwtUtils;
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -72,12 +76,6 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-        if (userRepository.existsByEmail(signUpRequest.getUsername())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Username is already taken!"));
-        }
-
         if (userRepository.existsByEmail(signUpRequest.getUsername())) {
             return ResponseEntity
                     .badRequest()
@@ -119,6 +117,13 @@ public class AuthController {
         }
 
         user.setRoles(roles);
+        userRepository.save(user);
+
+        Patient p = new Patient();
+        p.setUser(user);
+        p.setEmail(user.getEmail());
+        patientRepository.save(p);
+        user.setPatient(p);
         userRepository.save(user);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
