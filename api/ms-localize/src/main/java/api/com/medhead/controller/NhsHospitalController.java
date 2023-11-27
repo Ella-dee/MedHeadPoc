@@ -44,7 +44,7 @@ public class NhsHospitalController {
     public List<Hospital> getAllHospitals() throws IOException, InterruptedException, JSONException {
         return hospitalRepository.findAll();
     }
-    //test url http://localhost:9005/api/hospitals/getNearest/51.510067/0.133869
+    //test url http://localhost:9005/api/hospitals/getNearest/51.510067/-0.133869
 
     @GetMapping("getNearest/{latitude}/{longitude}")
     public List<Hospital> getNearestHospital(@PathVariable Double latitude, @PathVariable Double longitude){
