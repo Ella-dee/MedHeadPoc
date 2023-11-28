@@ -1,16 +1,9 @@
  <div class="container" *ngIf="currentUser; else loggedOut">
-    <div class="jumbotron">
+  <!-- Registered User with Info -->
+    <div class="jumbotron" *ngIf="patient.address">
       <h3 class="profileHeader">
         <strong>{{ patient.lastName | uppercase }} {{ patient.firstName | titlecase }}</strong> 
-      </h3>    
-    <!--
-    <strong>Roles:</strong>
-    <ul>
-      <li *ngFor="let role of currentUser.roles">
-        {{ role }}
-      </li>
-    </ul>
-  -->
+      </h3> 
   <div class="col-md-8 profileDetails">
     <div class="card mb-3">
       <div class="card-body">
@@ -59,6 +52,21 @@
           </div>
         </div>
         <hr>
+           
+    <!--
+      <div class="row">
+        <div class="col-sm-4">
+            <h6 class="mb-0">Roles</h6>
+          </div>
+          <div class="col-sm-8 text-secondary">
+             <ul>
+      <li *ngFor="let role of currentUser.roles">
+        {{ role }}
+      </li>
+    </ul>
+          </div>
+  </div>
+  -->
         <div class="row">
           <div class="col-sm-12 editInfo">
             <a class="btn btn-info ">Edit</a>
@@ -68,6 +76,125 @@
     </div>
     </div>
     </div>
+<!-- Registered User without Info -->
+    <div class="jumbotron" *ngIf="!patient.address">
+      <h3 class="profileHeader">
+        <strong>Register your info</strong> 
+      </h3> 
+      <div class="col-lg-8 profileDetails">
+        <form *ngIf="!isSuccessful" name="form"
+        (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
+        
+        <div class="card">
+          <div class="card-body">   
+            <div class="row mb-3">
+              <div class="col-sm-3">
+                <label for="firstName">FirstName</label>
+              </div>
+              <div class="col-sm-9 text-secondary">
+                <input type="text" class="form-control" name="firstName" [(ngModel)]="form.firstName" required #firstName="ngModel" placeholder="John"/> 
+                <div class="alert-danger" *ngIf="f.submitted && firstName.invalid">
+                <div *ngIf="firstName.errors?.required">FirstName is required</div>
+              </div>
+            </div>            
+            </div>
+            <div class="row mb-3">
+              <div class="col-sm-3">
+                <label for="lastName">LastName</label>
+              </div>
+              <div class="col-sm-9 text-secondary">
+                <input type="text" class="form-control" name="lastName" [(ngModel)]="form.lastName" required #lastName="ngModel" placeholder="Doe"/> 
+                <div class="alert-danger" *ngIf="f.submitted && lastName.invalid">
+                <div *ngIf="lastName.errors?.required">LastName is required</div>
+              </div>
+            </div>            
+            </div>
+            
+            <div class="row mb-3">
+              <div class="col-sm-3">
+                <label for="nhsNumber">NHS Number</label>
+              </div>
+              <div class="col-sm-9 text-secondary">
+                <input type="text" class="form-control" name="nhsNumber" [(ngModel)]="form.nhsNumber" required #nhsNumber="ngModel" placeholder="ZZ576137T"/> 
+                <div class="alert-danger" *ngIf="f.submitted && nhsNumber.invalid">
+                <div *ngIf="nhsNumber.errors?.required">NHS Number is required</div>
+              </div>
+            </div>            
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-sm-3">
+                <label for="birthdate">Birthdate</label>
+              </div>
+              <div class="col-sm-9 text-secondary">
+                <input type="text" class="form-control" name="birthdate" [(ngModel)]="form.birthdate" required #birthdate="ngModel" placeholder="1984-12-84"/> 
+                <div class="alert-danger" *ngIf="f.submitted && birthdate.invalid">
+                <div *ngIf="birthdate.errors?.required">Birthdate is required</div>
+              </div>
+            </div>            
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-sm-3">
+                <label for="birthdate">Phone</label>
+              </div>
+              <div class="col-sm-9 text-secondary">
+                <input type="text" class="form-control" name="phone" [(ngModel)]="form.phone" #phone="ngModel" placeholder="0845 643 9215"/> 
+              </div>
+            </div>  
+
+            <div class="row mb-3">
+              <div class="col-sm-3">
+                <label for="address">Address</label>
+              </div>
+              <div class="col-sm-9 text-secondary">
+                <input type="text" class="form-control" name="address" [(ngModel)]="form.address" required #address="ngModel" placeholder="Margam Country Park"/> 
+                <div class="alert-danger" *ngIf="f.submitted && address.invalid">
+                  <div *ngIf="address.errors?.required">Address is required</div>
+                </div>
+              </div>
+            </div>  
+
+            <div class="row mb-3">
+              <div class="col-sm-3">
+                <label for="postCode">PostCode</label>
+              </div>
+              <div class="col-sm-9 text-secondary">
+                <input type="text" class="form-control" name="postCode" [(ngModel)]="form.postCode" required #postCode="ngModel" placeholder="SA13 2TJ"/> 
+                <div class="alert-danger" *ngIf="f.submitted && postCode.invalid">
+                  <div *ngIf="postCode.errors?.required">PostCode is required</div>
+                </div>
+              </div>
+            </div> 
+
+            <div class="row mb-3">
+              <div class="col-sm-3">
+                <label for="city">City</label>
+              </div>
+              <div class="col-sm-9 text-secondary">
+                <input type="text" class="form-control" name="city" [(ngModel)]="form.city" required #city="ngModel" placeholder="Port Talbot"/> 
+                <div class="alert-danger" *ngIf="f.submitted && postCode.invalid">
+                  <div *ngIf="city.errors?.required">City is required</div>
+                </div>
+              </div>
+            </div> 
+            
+            
+         <div class="row">
+              <div class="col-sm-3"></div>
+              <div class="col-sm-9 text-secondary">
+                <button type="submit" class="btn btn-primary px-4 ">Save Changes</button>
+              </div>
+            </div>
+        </div>
+        <div class="alert alert-warning" *ngIf="f.submitted && infoRegistered">
+          Info Registration failed!<br />{{ errorMessage }}
+        </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
   </div>
   <ng-template #loggedOut>
     Please login.

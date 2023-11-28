@@ -3,7 +3,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { TokenStorageService } from '../_services/token-storage.service';
 import { User } from '../core/models/user.model';
 import { UserService } from '../_services/user.service';
-import { Observable } from 'rxjs';
+import { Observable, Subject, map, takeUntil, tap } from 'rxjs';
 
 @Component({
   selector: 'app-profile',
@@ -14,15 +14,48 @@ export class ProfileComponent implements OnInit {
   currentUser: any;
   @Input() user!: User;  
   patient!: any; 
+  registeredUser!: any;
+  private readonly unsubscribe$ = new Subject();
+  form: any = {};
+  isSuccessful = false;
+  infoRegistered = false;
+  errorMessage = '';
 
   constructor(private token: TokenStorageService, private userService: UserService) { }
 
   ngOnInit() {
     this.currentUser = this.token.getUser();
-    this.userService.getUserContent(this.currentUser.id).subscribe(
-      (data) => {
-        this.patient = data;
+    this.registeredUser =this.userService.getUserByEmail(this.currentUser.email).pipe(
+      takeUntil(this.unsubscribe$)).subscribe(
+        (data) => {          
+      this.registeredUser = data;      
+      this.userService.getUserContent(this.registeredUser.id).subscribe(
+        (data) => {
+          this.patient = data;
+        }
+      );
+        }
+      ); 
+  }
+
+  onSubmit() {
+    console.log("form submitted");
+    this.form.email = this.currentUser.email;
+    this.userService.registerPatientInfo(this.form).subscribe(
+      data => {
+        console.log(data);
+        this.isSuccessful = true;
+        this.infoRegistered = false;
+        window.location.reload();
+      },
+      err => {
+        this.errorMessage = err.error.message;
+        this.infoRegistered = true;
       }
     );
   }
+
+  ngOnDestroy() {
+    this.unsubscribe$.next;
+   }
 }
