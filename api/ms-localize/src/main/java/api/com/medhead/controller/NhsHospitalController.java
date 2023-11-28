@@ -2,6 +2,7 @@ package api.com.medhead.controller;
 
 import api.com.medhead.model.Hospital;
 import api.com.medhead.model.Location;
+import api.com.medhead.payload.request.PatientAddressRequest;
 import api.com.medhead.repository.HospitalRepository;
 import com.graphhopper.GHRequest;
 import com.graphhopper.GHResponse;
@@ -10,12 +11,10 @@ import com.graphhopper.ResponsePath;
 import com.graphhopper.config.CHProfile;
 import com.graphhopper.config.Profile;
 import com.graphhopper.util.PointList;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.json.JSONException;
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -46,10 +45,11 @@ public class NhsHospitalController {
     }
     //test url http://localhost:9005/api/hospitals/getNearest/51.510067/-0.133869
 
-    @GetMapping("getNearest/{latitude}/{longitude}")
-    public List<Hospital> getNearestHospital(@PathVariable Double latitude, @PathVariable Double longitude){
+    @PostMapping("getNearest")
+    public List<Hospital> getNearestHospital(@Valid @RequestBody PatientAddressRequest patientAddressRequest){
+        System.out.println("XXXXXXXXXXXXXxxx");
         GraphHopper hopper = createGraphHopperInstance("ms-localize/src/main/resources/england-latest.osm.pbf");
-        List<Hospital> nearestHospitals = routing(hopper, latitude, longitude);
+        List<Hospital> nearestHospitals = routing(hopper, patientAddressRequest.getLatitude(), patientAddressRequest.getLongitude());
         // release resources to properly shutdown or start a new instance
         hopper.close();
         return nearestHospitals;

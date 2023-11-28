@@ -6,7 +6,10 @@ import lombok.Data;
 import java.util.Comparator;
 
 @Entity
-@Table(name="hospital")
+@Table(name="hospital",
+        uniqueConstraints = {
+        @UniqueConstraint(columnNames = "name")
+})
 @Data
 public class Hospital {
 
