@@ -11,9 +11,9 @@
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO users VALUES (1, 'jackson.michell@test.com', '$2a$10$mmEBQaI.2Om2JoQHxKACaO6.44he5wnk4Ko9nolvDpkegC3ekGS9C');
-INSERT INTO users VALUES (2, 'mandy.lloyd@test.com', '$2a$10$cvT3FWEzH0wgfi1xgnpmsebUbXo435txY0N2ml2.9ka1IqAM7Ux5m');
-INSERT INTO users VALUES (3, 'jayden.reid@test.com', '$2a$10$j8WGw7toEPuxZWjtKb4uMucAu2MdUsliheBJqeSmwFsdE4pr7mxPe');
+INSERT INTO users VALUES ('jackson.michell@test.com', '$2a$10$mmEBQaI.2Om2JoQHxKACaO6.44he5wnk4Ko9nolvDpkegC3ekGS9C');
+INSERT INTO users VALUES ('mandy.lloyd@test.com', '$2a$10$cvT3FWEzH0wgfi1xgnpmsebUbXo435txY0N2ml2.9ka1IqAM7Ux5m');
+INSERT INTO users VALUES ('jayden.reid@test.com', '$2a$10$j8WGw7toEPuxZWjtKb4uMucAu2MdUsliheBJqeSmwFsdE4pr7mxPe');
 
 --
 -- TOC entry 3357 (class 0 OID 26119)
