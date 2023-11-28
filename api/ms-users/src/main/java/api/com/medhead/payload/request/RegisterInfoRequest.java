@@ -32,7 +32,7 @@ public class RegisterInfoRequest {
     private String birthdate;
     @NotEmpty
     @NotBlank
-    @Size(max = 10)
+    @Size(max = 100)
     private String nhsNumber;
     @NotBlank
     @NotEmpty
