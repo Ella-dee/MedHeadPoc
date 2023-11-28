@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { TokenStorageService } from './_services/token-storage.service';
+import { UserService } from './_services/user.service';
+import { Subject, takeUntil } from 'rxjs';
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
+
 
 @Component({
   selector: 'app-root',
@@ -9,9 +14,13 @@ import { TokenStorageService } from './_services/token-storage.service';
 export class AppComponent implements OnInit {
   private roles!: string[];
   isLoggedIn = false;
-  username!: string;
+  registeredUser!: any;
+  patient!: any;
+  private readonly unsubscribe$ = new Subject();
 
-  constructor(private tokenStorageService: TokenStorageService) { }
+  constructor(private tokenStorageService: TokenStorageService, private userService: UserService,library: FaIconLibrary) { 
+    library.addIcons(faUser);
+  }
  
   ngOnInit() {
     this.isLoggedIn = !!this.tokenStorageService.getToken();
@@ -20,7 +29,17 @@ export class AppComponent implements OnInit {
       const user = this.tokenStorageService.getUser();
       this.roles = user.roles;
 
-      this.username = user.username;
+      this.registeredUser =this.userService.getUserByEmail(user.email).pipe(
+        takeUntil(this.unsubscribe$)).subscribe(
+          (data) => {          
+        this.registeredUser = data;      
+        this.userService.getUserContent(this.registeredUser.id).subscribe(
+          (data) => {
+            this.patient = data;
+          }
+        );
+          }
+        ); 
     }
   }
 

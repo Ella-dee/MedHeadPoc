@@ -1,7 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { UserService } from '../_services/user.service';
 import { User } from 'src/app/core/models/user.model';
-import { Observable } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
+import { TokenStorageService } from '../_services/token-storage.service';
 
 @Component({
   selector: 'app-home',
@@ -9,14 +10,36 @@ import { Observable } from 'rxjs';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+  form: any = {};
+  isLoggedIn = false;
+  isLoginFailed = false;
+  errorMessage = ''; 
+  currentUser: any;
   @Input() user!: User;  
-  users$!: Observable<User[]>;
+  patient!: any; 
+  registeredUser!: any;
+  patientFullAddress!: string;
+  private readonly unsubscribe$ = new Subject();
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService, private token: TokenStorageService) { }
   
   ngOnInit() {
-    this.users$ = this.userService.getPublicContent();
-    //this.userService.getPublicContent().subscribe((users) => { console.log(JSON.stringify(users));});
-    //this.user = this.userService.getUserContent(1);
+    if (this.token.getToken()) {
+      this.isLoggedIn = true;
+      this.currentUser = this.token.getUser();
+      this.registeredUser =this.userService.getUserByEmail(this.currentUser.email).pipe(
+        takeUntil(this.unsubscribe$)).subscribe(
+          (data) => {          
+        this.registeredUser = data;      
+        this.userService.getUserContent(this.registeredUser.id).subscribe(
+          (data) => {
+            this.patient = data;
+            this.patientFullAddress = this.patient.address+', '+this.patient.postCode+', '+this.patient.city;
+          }
+        );
+          }
+        );
+    }
+
   }
 }
