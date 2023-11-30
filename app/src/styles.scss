@@ -63,7 +63,7 @@ body {
 }
 
 .jumbotron{
-  margin-top: 3em;
+  margin-top: 2em;
   text-align: center;
 }
 .profileHeader{
@@ -132,13 +132,16 @@ body {
       }
     }
 
-    button.btn {
-      background-color: $primary2;
-      color: #ffffff;
-      padding: 10px 45px;
-      border-radius: 5px;
-      margin-top: 10px;
-      text-transform: uppercase;
-    }
   }
+}
+.btn-box{
+  text-align: center;
+}
+button.btn {
+  background-color: $primary2;
+  color: #ffffff;
+  padding: 10px 45px;
+  border-radius: 5px;
+  margin-top: 10px;
+  text-transform: uppercase;
 }

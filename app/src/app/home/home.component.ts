@@ -22,7 +22,7 @@ export class HomeComponent implements OnInit {
   registeredUser!: any;
   patientFullAddress!: string;
   private readonly unsubscribe$ = new Subject();
-  hospitals$!: Observable<Hospital[]>;
+  hospitals$!: Hospital[];
   
   isSuccessful = false;
 
@@ -51,8 +51,11 @@ export class HomeComponent implements OnInit {
   onSubmit() {
     console.log("form submitted");
     this.form.patientFullAddress = this.patientFullAddress;
-    this.hospitals$ = this.userService.getNearestHospital(this.patient);
-    console.log(this.hospitals$);
+    this.userService.getNearestHospital(this.patient).subscribe(
+      data => {
+        this.hospitals$ = data;
+      }
+    );
     this.isSuccessful= true;
   }
 }

@@ -28,14 +28,63 @@
                 <button type="submit" class="btn btn-primary px-4 ">Find Hospital</button>
               </div>
             </form>
+
+            <!-- Hospital List -->
             <div class="jumbotron" *ngIf="isSuccessful">
-              <div class="card" *ngFor="let hospital in hospitals$">
-                <h2>{{ hospital.name | uppercase }}</h2>
-                <p>{{ hospital.address }}</p>
-                <p>{{ hospital.city }}</p>
-              </div>
-              
+              <h3 class="profileHeader">
+                <strong>Nearest Hospitals</strong> 
+              </h3> 
+              <div class="col-md-8 profileDetails">
+                <div class="card mb-3"  *ngFor="let hospital of hospitals$">
+                  <div class="card-body" *ngIf="!hospital">
+                    <div class="row">
+                      <div class="col-sm-12">
+                        <h6 class="mb-0">No hospital was found</h6>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-sm-4">
+                        <h6 class="mb-0">Name</h6>
+                      </div>
+                      <div class="col-sm-8 text-secondary">
+                        {{hospital.name}}
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                      <div class="col-sm-4">
+                        <h6 class="mb-0">Address</h6>
+                      </div>
+                      <div class="col-sm-8 text-secondary">
+                        {{hospital.address}}, {{hospital.postCode}}, {{hospital.city}}
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                      <div class="col-sm-4">
+                        <h6 class="mb-0">Distance in Km</h6>
+                      </div>
+                      <div class="col-sm-8 text-secondary">
+                        {{hospital.formattedDistanceInKm}}
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                      <div class="col-sm-4">
+                        <h6 class="mb-0">Distance in Time</h6>
+                      </div>
+                      <div class="col-sm-8 text-secondary">
+                        {{hospital.formattedDistanceInTime}}
+                      </div>
+                    </div>
+                    <hr>                  
+                  </div>
+                </div>
+                </div>
             </div>
+            <!-- End of Hospital list-->
           </div>
         </div>
       </div>

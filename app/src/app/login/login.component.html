@@ -1,5 +1,12 @@
 <div class="col-md-12">
     <div class="card card-container" *ngIf="!isLoggedIn">
+      <div
+            class="alert alert-success"
+            role="alert"
+            *ngIf="successMessage"
+          >
+            {{successMessage}}
+          </div>
       <form
         name="form"
         (ngSubmit)="f.form.valid && onSubmit()"
@@ -47,9 +54,7 @@
           </div>
         </div>
         <div class="form-group">
-          <button class="btn btn-primary btn-block">
-            Login
-          </button>
+          <button class="btn btn-primary btn-block">Log In</button>
         </div>
         <div class="form-group">
           <div

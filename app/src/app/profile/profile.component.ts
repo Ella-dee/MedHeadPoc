@@ -18,7 +18,7 @@ export class ProfileComponent implements OnInit {
   private readonly unsubscribe$ = new Subject();
   form: any = {};
   isSuccessful = false;
-  infoRegistered = false;
+  infoRegisteredFailed = false;
   errorMessage = '';
 
   constructor(private token: TokenStorageService, private userService: UserService) { }
@@ -45,12 +45,12 @@ export class ProfileComponent implements OnInit {
       data => {
         console.log(data);
         this.isSuccessful = true;
-        this.infoRegistered = false;
+        this.infoRegisteredFailed = false;
         window.location.reload();
       },
       err => {
         this.errorMessage = err.error.message;
-        this.infoRegistered = true;
+        this.infoRegisteredFailed = true;
       }
     );
   }
