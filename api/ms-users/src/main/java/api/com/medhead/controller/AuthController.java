@@ -12,6 +12,9 @@ import api.com.medhead.payload.response.JwtResponse;
 import api.com.medhead.payload.response.MessageResponse;
 import api.com.medhead.repository.PatientRepository;
 import api.com.medhead.security.UserDetailsImpl;
+import api.com.medhead.service.AuthService;
+import api.com.medhead.service.RoleService;
+import api.com.medhead.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -41,12 +44,11 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private UserRepository userRepository;
-
+    private UserService userService;
     @Autowired
-    private RoleRepository roleRepository;
+    private RoleService roleService;
     @Autowired
-    private PatientRepository patientRepository;
+    private AuthService authService;
 
     @Autowired
     private PasswordEncoder encoder;
@@ -76,56 +78,14 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-        if (userRepository.existsByEmail(signUpRequest.getUsername())) {
+        if (userService.existsByEmail(signUpRequest.getUsername())) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Email is already in use!"));
         }
 
         // Create new user's account
-        User user = new User(signUpRequest.getUsername(),
-                encoder.encode(signUpRequest.getPassword()));
-
-        Set<String> strRoles = signUpRequest.getRole();
-        Set<Role> roles = new HashSet<>();
-
-        if (strRoles == null) {
-            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(userRole);
-        } else {
-            strRoles.forEach(role -> {
-                switch (role) {
-                    case "admin":
-                        Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(adminRole);
-
-                        break;
-                    case "mod":
-                        Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(modRole);
-
-                        break;
-                    default:
-                        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(userRole);
-                }
-            });
-        }
-
-        user.setRoles(roles);
-
-        userRepository.save(user);
-
-        Patient p = new Patient();
-        p.setUser(user);
-        p.setEmail(user.getEmail());
-        patientRepository.save(p);
-        user.setPatient(p);
-        userRepository.save(user);
+        authService.signupUser(signUpRequest);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }

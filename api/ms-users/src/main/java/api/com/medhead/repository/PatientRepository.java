@@ -11,5 +11,4 @@ import java.util.Optional;
 public interface PatientRepository extends JpaRepository<Patient, Integer> {
     Patient findByEmail(String email);
     Patient findByUserId(int userId);
-    Boolean existsByEmail(String email);
 }
