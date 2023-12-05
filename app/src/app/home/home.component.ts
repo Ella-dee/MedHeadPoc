@@ -11,20 +11,14 @@ import { TokenStorageService } from '../_services/token-storage.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  form: any = {};
+  
   isLoggedIn = false;
-  isLoginFailed = false;
-  errorMessage = ''; 
   currentUser: any;
-  @Input() user!: User; 
-  @Input() hospital!: Hospital;  
+  @Input() user!: User;  
   patient!: any; 
   registeredUser!: any;
   patientFullAddress!: string;
   private readonly unsubscribe$ = new Subject();
-  hospitals$!: Hospital[];
-  
-  isSuccessful = false;
 
   constructor(private userService: UserService, private token: TokenStorageService) { }
   
@@ -39,7 +33,6 @@ export class HomeComponent implements OnInit {
         this.userService.getUserContent(this.registeredUser.id).subscribe(
           (data) => {
             this.patient = data;
-            this.patientFullAddress = this.patient.address+', '+this.patient.postCode+', '+this.patient.city;
           }
         );
           }
@@ -48,14 +41,5 @@ export class HomeComponent implements OnInit {
 
   }
 
-  onSubmit() {
-    console.log("form submitted");
-    this.form.patientFullAddress = this.patientFullAddress;
-    this.userService.getNearestHospital(this.patient).subscribe(
-      data => {
-        this.hospitals$ = data;
-      }
-    );
-    this.isSuccessful= true;
-  }
+ 
 }

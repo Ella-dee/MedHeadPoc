@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, from, map } from 'rxjs';
 import { User } from '../core/models/user.model';
 import { Hospital } from '../core/models/hospital.model';
+import { SpecialtyGroup } from '../core/models/specialty-group.model';
+import { Specialty } from '../core/models/specialty';
 
 const API_URL = '/api/users/';
 const API_LOC_URL = '/api/hospitals/';
@@ -45,5 +47,15 @@ registerPatientInfo(patient:any): Observable<User> {
     city: patient.city
   });
 };
+
+getAllSpecialityGroups(): Observable<SpecialtyGroup[]>{
+  return this.http.get<SpecialtyGroup[]>(API_LOC_URL+ 'speciality-groups');
+}
+
+getSpecialitiesBySpecialityGroupByName(value:string): Observable<Specialty[]>{
+  return this.http.post<Specialty[]>(API_LOC_URL+ 'specialities',{
+    name: value
+  });
+}
 
 }

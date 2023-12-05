@@ -1,93 +1,35 @@
 <div class="container">
     <header class="main-header">
-    <app-login></app-login>
-    <section class="book_section layout_padding" *ngIf="isLoggedIn">
-      <div class="container">
-        <div class="row">
-          <div class="col">
-            <form *ngIf="!isSuccessful" name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
-              <h4>
-                FIND <span>HOSPITAL</span>
-              </h4>
-              <br>
-              <div class="form-row ">
-                <div class="form-group col-lg-6">
-                  <label for="inputPatientAddress">Your Address </label>
-                  <input type="text" class="form-control" id="inputPatientAddress" placeholder={{patientFullAddress}} readonly>
-                </div>
-                <div class="form-group col-lg-6">
-                  <label for="inputSpecialty">Specialty</label>
-                  <select name="inputSpecialty" class="form-control wide" id="inputSpecialty" [(ngModel)]="form.inputSpecialty" #inputSpecialty="ngModel" >
-                    <option value="Normal distribution ">Pediatrics </option>
-                    <option value="Normal distribution ">Heart Surgery </option>
-                    <option value="Normal distribution ">Psychology</option>
-                  </select>
+      <section class="layout_padding" *ngIf="!isLoggedIn">
+        <div class="container ">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="detail-box">
+                <h2>
+                  Find the <br>
+                  <span>
+                    Nearest Hospital
+                  </span>
+                </h2>
+                <p>
+                  with your desired specialty and with a bed available. You must be logged in to search for hospitals.
+                </p>
+                <div class="row">
+                <a href="" routerLink="/register">Sign Up</a>                
+                <a href="" routerLink="/login">Login</a>
                 </div>
               </div>
-              <div class="btn-box">
-                <button type="submit" class="btn btn-primary px-4 ">Find Hospital</button>
-              </div>
-            </form>
-
-            <!-- Hospital List -->
-            <div class="jumbotron" *ngIf="isSuccessful">
-              <h3 class="profileHeader">
-                <strong>Nearest Hospitals</strong> 
-              </h3> 
-              <div class="col-md-8 profileDetails">
-                <div class="card mb-3"  *ngFor="let hospital of hospitals$">
-                  <div class="card-body" *ngIf="!hospital">
-                    <div class="row">
-                      <div class="col-sm-12">
-                        <h6 class="mb-0">No hospital was found</h6>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-sm-4">
-                        <h6 class="mb-0">Name</h6>
-                      </div>
-                      <div class="col-sm-8 text-secondary">
-                        {{hospital.name}}
-                      </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                      <div class="col-sm-4">
-                        <h6 class="mb-0">Address</h6>
-                      </div>
-                      <div class="col-sm-8 text-secondary">
-                        {{hospital.address}}, {{hospital.postCode}}, {{hospital.city}}
-                      </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                      <div class="col-sm-4">
-                        <h6 class="mb-0">Distance in Km</h6>
-                      </div>
-                      <div class="col-sm-8 text-secondary">
-                        {{hospital.formattedDistanceInKm}}
-                      </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                      <div class="col-sm-4">
-                        <h6 class="mb-0">Distance in Time</h6>
-                      </div>
-                      <div class="col-sm-8 text-secondary">
-                        {{hospital.formattedDistanceInTime}}
-                      </div>
-                    </div>
-                    <hr>                  
-                  </div>
-                </div>
-                </div>
             </div>
-            <!-- End of Hospital list-->
+            <div class="col-md-6">
+              <div class="img-box">
+                <img src="../../assets/images/slider-img.jpg" alt="patient in hospital bed with nurse">
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
+    <section class="book_section layout_padding" *ngIf="isLoggedIn">
+      <app-booking></app-booking>
     </section>
     </header>
   </div>

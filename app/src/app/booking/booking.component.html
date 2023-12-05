@@ -1,0 +1,93 @@
+<div class="container">
+    <div class="row">
+      <div class="col">
+        <form *ngIf="!isSuccessful" name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
+          <h4>
+            FIND <span>HOSPITAL</span>
+          </h4>
+          <div class="form-row ">
+            <div class="form-group col-lg-6">
+              <label for="inputPatientAddress">Your Address </label>
+              <input type="text" class="form-control" id="inputPatientAddress" placeholder={{patientFullAddress}} readonly>
+            </div>
+            <div class="form-group col-lg-6">
+              <label for="inputSpecialtyGroup">Specialty Group</label>
+              <select name="inputSpecialtyGroup" class="form-control wide" id="inputSpecialtyGroup" (change)="onChange($event)" [ngModel]="form.inputSpecialtyGroup" #inputSpecialtyGroup="ngModel" >
+                <option *ngFor="let speGroup of speGroups$">{{speGroup.name}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row ">
+            <div class="form-group col-lg-6">
+            </div>
+            <div class="form-group col-lg-6">
+              <label for="inputSpecialtyGroup">Specialty</label>
+              <select name="inputSpecialty" class="form-control wide" id="inputSpecialty" [ngModel]="form.inputSpecialty" #inputSpecialty="ngModel" >
+                <option *ngFor="let spe of specialties$">{{spe.name}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="btn-box">
+            <button type="submit" class="btn btn-primary px-4 ">Find Hospital</button>
+          </div>
+        </form>
+
+        <!-- Hospital List -->
+        <div class="jumbotron" *ngIf="isSuccessful">
+          <h3 class="profileHeader">
+            <strong>Nearest Hospitals</strong> 
+          </h3> 
+          <div class="col-md-8 profileDetails">
+            <div class="card mb-3"  *ngFor="let hospital of hospitals$">
+              <div class="card-body" *ngIf="!hospital">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <h6 class="mb-0">No hospital was found</h6>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-sm-4">
+                    <h6 class="mb-0">Name</h6>
+                  </div>
+                  <div class="col-sm-8 text-secondary">
+                    {{hospital.name}}
+                  </div>
+                </div>
+                <hr>
+                <div class="row">
+                  <div class="col-sm-4">
+                    <h6 class="mb-0">Address</h6>
+                  </div>
+                  <div class="col-sm-8 text-secondary">
+                    {{hospital.address}}, {{hospital.postCode}}, {{hospital.city}}
+                  </div>
+                </div>
+                <hr>
+                <div class="row">
+                  <div class="col-sm-4">
+                    <h6 class="mb-0">Distance in Km</h6>
+                  </div>
+                  <div class="col-sm-8 text-secondary">
+                    {{hospital.formattedDistanceInKm}}
+                  </div>
+                </div>
+                <hr>
+                <div class="row">
+                  <div class="col-sm-4">
+                    <h6 class="mb-0">Distance in Time</h6>
+                  </div>
+                  <div class="col-sm-8 text-secondary">
+                    {{hospital.formattedDistanceInTime}}
+                  </div>
+                </div>
+                <hr>                  
+              </div>
+            </div>
+            </div>
+        </div>
+        <!-- End of Hospital list-->
+      </div>
+    </div>
+  </div>

@@ -13,6 +13,7 @@ import { ProfileComponent } from './profile/profile.component';
 
 import { authInterceptorProviders } from './_helpers/auth.interceptor';
 import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { BookingComponent } from './booking/booking.component';
 
 
 @NgModule({
@@ -22,6 +23,7 @@ import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontaweso
     RegisterComponent,
     HomeComponent,
     ProfileComponent,
+    BookingComponent,
   ],
   imports: [
     BrowserModule,
