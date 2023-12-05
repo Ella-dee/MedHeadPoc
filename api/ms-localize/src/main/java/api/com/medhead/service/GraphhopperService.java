@@ -27,7 +27,7 @@ import static java.lang.Math.cos;
 public class GraphhopperService {
 
     private static final DecimalFormat df = new DecimalFormat("0.00");
-    
+
     @Autowired
     HospitalService hospitalService;
 

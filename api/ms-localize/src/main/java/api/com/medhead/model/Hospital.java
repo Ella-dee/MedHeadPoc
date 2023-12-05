@@ -4,12 +4,10 @@ package api.com.medhead.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.util.Comparator;
+import java.util.List;
 
 @Entity
-@Table(name="hospital",
-        uniqueConstraints = {
-        @UniqueConstraint(columnNames = "name")
-})
+@Table(name="hospital")
 @Data
 public class Hospital {
 
@@ -17,7 +15,7 @@ public class Hospital {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
-    @Column(name = "name",unique=true)
+    @Column(name = "name")
     private String name;
     @Column(name = "address")
     private String address;
@@ -41,6 +39,9 @@ public class Hospital {
     private String formattedDistanceInTime;
     @Transient
     private String formattedDistanceInKm;
+
+    @ManyToMany(mappedBy = "hospitals", cascade = CascadeType.REMOVE)
+    private List<Speciality> specialities;
 
     public Hospital(int id, String name, String address, String city, String postCode, double longitude, double latitude, String phone, String website, String email) {
         this.id = id;
