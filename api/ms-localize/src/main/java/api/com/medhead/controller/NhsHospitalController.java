@@ -27,8 +27,6 @@ public class NhsHospitalController {
     GraphhopperService graphhopperService;
     @Autowired
     SpecialityGroupService specialityGroupService;
-    @Autowired
-    HospitalRepository hospitalRepository;
 
     @Value("${location.search.perimeter.meters}")
     private int locationSearchPerimeterMeters;
@@ -56,6 +54,11 @@ public class NhsHospitalController {
     @GetMapping("speciality-groups")
     public List<SpecialityGroup> getAllSpecialityGroups() {
         return specialityGroupService.getAllSpecialityGroups();
+    }
+
+    @GetMapping("perimeter")
+    public int getPerimeter(){
+        return locationSearchPerimeterMeters;
     }
 
     @PostMapping("getNearest")

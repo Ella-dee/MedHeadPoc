@@ -60,7 +60,6 @@ public class AuthService {
         }
 
         user.setRoles(roles);
-
         userService.save(user);
 
         Patient p = new Patient();

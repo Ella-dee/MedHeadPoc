@@ -65,11 +65,16 @@ public class PatientService {
         JSONArray hits = objectForCoordinates.getJSONArray("hits");
         for (int i = 0; i < hits.length(); i++) {
             JSONObject object = hits.getJSONObject(i);
-            if (object.get("postcode").equals(p.getPostCode()) && object.get("city").equals(p.getCity())) {
+            String houseNb = object.get("housenumber").toString();
+            String pAddress = p.getAddress();
+            String substringAddress = pAddress.substring(Math.max(pAddress.length() - 2, 0));
+            if (substringAddress.equalsIgnoreCase("St")) {
+                pAddress = houseNb+" "+pAddress.substring(0, pAddress.length() - 2) + "Street";
+            }
+            if (pAddress.contains(object.get("street").toString()) && object.get("city").equals(p.getCity())) {
                 JSONObject point = (JSONObject) object.get("point");
                 String lat = point.get("lat").toString();
                 String lon = point.get("lng").toString();
-                String patientLat, patientLon;
                 if (lon.length() > 9) {
                     lon = lon.substring(0, 9);
                 }
