@@ -59,6 +59,8 @@ public class GraphhopperService {
     public List<Hospital> routing(GraphHopper hopper, Double latitude, Double longitude, int specialityId, int locationSearchPerimeterMeters) {
         Location myLoc = generateLocation(locationSearchPerimeterMeters, latitude, longitude);
         List<Hospital> hospitals = hospitalService.findHospitalWithinPerimeter(myLoc.getLatitudeLeft(), myLoc.getLatitudeRight(), myLoc.getLongitudeRight(), myLoc.getLongitudeLeft(), specialityId);
+         System.out.println("specialtyID: "+specialityId);
+        System.out.println(hospitals);
         List<Hospital> hospitalListSortedByTime = new ArrayList<>();
 
         for (int i = 0; i <hospitals.size();++i) {
