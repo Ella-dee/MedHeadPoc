@@ -32,7 +32,6 @@ export class BookingComponent {
   speGroup!:any;
   isSuccessful = false;
   isLoggedIn = false;
-  inputSpecialtyGroup!:any;
 
   private readonly unsub$ = new Subject();
   
@@ -61,10 +60,11 @@ export class BookingComponent {
       (data)=>{
         this.speGroups$ = data;
         this.form = {inputSpecialtyGroup : this.speGroups$[0].id};
-        console.log("inputSpecialtyGroup = ", this.inputSpecialtyGroup);  
+        this.form = {inputSpecialty : this.specialties$[0].id};         
         this.userService.getSpecialitiesBySpecialityGroupByName(this.speGroups$[0].name).subscribe(
       data => {
         this.specialties$ = data;
+        this.form = {inputSpecialty : this.specialties$[0].id};
       }
     );
   }
@@ -75,11 +75,12 @@ export class BookingComponent {
   onChange(e:Event){
     const target = e.target as HTMLSelectElement;
   if (target) {
-    console.log("target.value: ", target.value);
+    this.form = {inputSpecialtyGroup : target.value};  
   }
     this.userService.getSpecialitiesBySpecialityGroupById(parseInt(target.value)).subscribe(
       data => {
         this.specialties$ = data;
+        this.form = {inputSpecialty : this.specialties$[0].id};
       }
     )
   }
@@ -88,7 +89,7 @@ export class BookingComponent {
     console.log("form submitted");
     this.form.patientFullAddress = this.patientFullAddress;
     this.form.latitude = this.patient.latitude;
-    this.form.longitude = this.patient.longitude;    
+    this.form.longitude = this.patient.longitude;  
     this.userService.getNearestHospital(this.form).subscribe(
       data => {
         this.hospitals$ = data;
