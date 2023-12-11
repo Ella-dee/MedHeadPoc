@@ -32,6 +32,7 @@ export class BookingComponent {
   speGroup!:any;
   isSuccessful = false;
   isLoggedIn = false;
+  perimeter!: any;
 
   private readonly unsub$ = new Subject();
   
@@ -87,10 +88,15 @@ export class BookingComponent {
 
   onSubmit() {
     console.log("form submitted");
-    console.log(this.form);
     this.form.patientFullAddress = this.patientFullAddress;
     this.form.latitude = this.patient.latitude;
     this.form.longitude = this.patient.longitude;  
+    this.userService.getPerimeter().subscribe(
+      data=>{
+        this.perimeter = data;        
+        this.perimeter = this.perimeter/1000;
+      }
+    );
     this.userService.getNearestHospital(this.form).subscribe(
       data => {
         this.hospitals$ = data;

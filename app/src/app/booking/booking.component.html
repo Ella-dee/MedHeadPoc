@@ -49,18 +49,19 @@
 
         <!-- Hospital List -->
         <div class="jumbotron" *ngIf="isSuccessful">
+          <ng-template *ngIf="hospitals$.length > 0; else noHospitalFound">
+            <h3 class="profileHeader" >
+              <strong>Nearest Hospitals</strong> 
+            </h3> 
+          </ng-template>
+          <ng-template #noHospitalFound>
           <h3 class="profileHeader">
-            <strong>Nearest Hospitals</strong> 
+            <strong>No hospital was found within given perimeter ({{perimeter}}km)</strong> 
           </h3> 
+          <p>Please contact your emergency service</p>
+          </ng-template>
           <div class="col-md-8 profileDetails">
             <div class="card mb-3"  *ngFor="let hospital of hospitals$">
-              <div class="card-body" *ngIf="!hospital">
-                <div class="row">
-                  <div class="col-sm-12">
-                    <h4 class="mb-0">No hospital was found</h4>
-                  </div>
-                </div>
-              </div>
               <div class="card-body">
                 <div class="row">
                   <div class="col-sm-4">

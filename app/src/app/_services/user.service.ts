@@ -71,4 +71,9 @@ getSpecialityByName(value:string): Observable<Specialty>{
     name: value
   });
 }
+
+getPerimeter(){
+  return this.http.get(API_LOC_URL+ "perimeter");
+}
+
 }
