@@ -87,6 +87,7 @@ export class BookingComponent {
 
   onSubmit() {
     console.log("form submitted");
+    console.log(this.form);
     this.form.patientFullAddress = this.patientFullAddress;
     this.form.latitude = this.patient.latitude;
     this.form.longitude = this.patient.longitude;  
