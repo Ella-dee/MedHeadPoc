@@ -5,6 +5,7 @@ import api.com.medhead.model.Speciality;
 import api.com.medhead.model.SpecialityGroup;
 import api.com.medhead.payload.request.PatientSearchRequest;
 import api.com.medhead.payload.request.SpecialityGroupRequest;
+import api.com.medhead.repository.HospitalRepository;
 import api.com.medhead.service.GraphhopperService;
 import api.com.medhead.service.HospitalService;
 import api.com.medhead.service.SpecialityGroupService;
@@ -26,13 +27,11 @@ public class NhsHospitalController {
     GraphhopperService graphhopperService;
     @Autowired
     SpecialityGroupService specialityGroupService;
+    @Autowired
+    HospitalRepository hospitalRepository;
 
     @Value("${location.search.perimeter.meters}")
     private int locationSearchPerimeterMeters;
-    private int randomgenerator(int min, int max){
-        Random random = new Random();
-        return random.nextInt((max+1) - min) +min;
-    }
 
     @GetMapping("all")
     public List<Hospital> getAllHospitals() {

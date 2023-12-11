@@ -33,6 +33,8 @@ public class Hospital {
     private String website;
     @Column(name = "email")
     private String email;
+    @Column(name = "available_beds", columnDefinition = "integer default 0")
+    private int availableBeds;
     @Transient
     private Long distanceInTime;
     @Transient
