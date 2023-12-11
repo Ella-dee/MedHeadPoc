@@ -26,10 +26,12 @@ export class UserService {
 getUserByEmail(email:string): Observable<User> {
   return this.http.get<User>(API_URL + 'email/'+email);
 };
-getNearestHospital(patient:any): Observable<Hospital[]>{
+
+getNearestHospital(search:any): Observable<Hospital[]>{
   return this.http.post<Hospital[]>(API_LOC_URL+ 'getNearest',{
-    longitude: patient.longitude,
-    latitude: patient.latitude
+    longitude: search.longitude,
+    latitude: search.latitude,
+    specialityId: search.inputSpecialty
   });
 }
 
@@ -58,4 +60,15 @@ getSpecialitiesBySpecialityGroupByName(value:string): Observable<Specialty[]>{
   });
 }
 
+getSpecialitiesBySpecialityGroupById(value:number): Observable<Specialty[]>{
+  return this.http.post<Specialty[]>(API_LOC_URL+ 'specialities',{
+    id: value
+  });
+}
+
+getSpecialityByName(value:string): Observable<Specialty>{
+  return this.http.post<Specialty>(API_LOC_URL+ 'speciality',{
+    name: value
+  });
+}
 }

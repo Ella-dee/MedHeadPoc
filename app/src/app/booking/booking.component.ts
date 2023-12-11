@@ -32,7 +32,8 @@ export class BookingComponent {
   speGroup!:any;
   isSuccessful = false;
   isLoggedIn = false;
-  inputSpecialtyGroup!:SpecialtyGroup;
+  inputSpecialtyGroup!:any;
+
   private readonly unsub$ = new Subject();
   
   constructor(private userService: UserService, private token: TokenStorageService, private http: HttpClient) { }
@@ -58,7 +59,9 @@ export class BookingComponent {
     this.userService.getAllSpecialityGroups().pipe(
       takeUntil(this.unsub$)).subscribe(
       (data)=>{
-        this.speGroups$= data;
+        this.speGroups$ = data;
+        this.form = {inputSpecialtyGroup : this.speGroups$[0].id};
+        console.log("inputSpecialtyGroup = ", this.inputSpecialtyGroup);  
         this.userService.getSpecialitiesBySpecialityGroupByName(this.speGroups$[0].name).subscribe(
       data => {
         this.specialties$ = data;
@@ -68,10 +71,13 @@ export class BookingComponent {
       );
 }
 
+
   onChange(e:Event){
     const target = e.target as HTMLSelectElement;
-  if (target) console.log(target.value);
-    this.userService.getSpecialitiesBySpecialityGroupByName(target.value).subscribe(
+  if (target) {
+    console.log("target.value: ", target.value);
+  }
+    this.userService.getSpecialitiesBySpecialityGroupById(parseInt(target.value)).subscribe(
       data => {
         this.specialties$ = data;
       }
@@ -81,9 +87,14 @@ export class BookingComponent {
   onSubmit() {
     console.log("form submitted");
     this.form.patientFullAddress = this.patientFullAddress;
-    this.userService.getNearestHospital(this.patient).subscribe(
+    this.form.latitude = this.patient.latitude;
+    this.form.longitude = this.patient.longitude;    
+    this.userService.getNearestHospital(this.form).subscribe(
       data => {
         this.hospitals$ = data;
+      }, err => {
+        this.errorMessage = err.error.message;
+        this.isSuccessful = false;
       }
     );
     this.isSuccessful= true;
