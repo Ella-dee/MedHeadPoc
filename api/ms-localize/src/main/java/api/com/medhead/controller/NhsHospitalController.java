@@ -3,7 +3,7 @@ package api.com.medhead.controller;
 import api.com.medhead.model.Hospital;
 import api.com.medhead.model.Speciality;
 import api.com.medhead.model.SpecialityGroup;
-import api.com.medhead.payload.request.PatientAddressRequest;
+import api.com.medhead.payload.request.PatientSearchRequest;
 import api.com.medhead.payload.request.SpecialityGroupRequest;
 import api.com.medhead.service.GraphhopperService;
 import api.com.medhead.service.HospitalService;
@@ -46,7 +46,12 @@ public class NhsHospitalController {
 
     @PostMapping("specialities")
     public List<Speciality> getSpecialitiesBySpecialityGroupName(@Valid @RequestBody SpecialityGroupRequest specialityGroupRequest) {
-        return specialityService.getSpecialitiesBySpecialityGroupName(specialityGroupRequest.getName());
+        return specialityService.getSpecialitiesBySpecialityGroupId(specialityGroupRequest.getId());
+    }
+
+    @PostMapping("speciality")
+    public Speciality getSpecialityByName(@Valid @RequestBody SpecialityGroupRequest specialityGroupRequest) {
+        return specialityService.findOneById(specialityGroupRequest.getId());
     }
 
     @GetMapping("speciality-groups")
@@ -54,11 +59,9 @@ public class NhsHospitalController {
         return specialityGroupService.getAllSpecialityGroups();
     }
 
-    //test url http://localhost:9005/api/hospitals/getNearest/51.510067/-0.133869
-
     @PostMapping("getNearest")
-    public List<Hospital> getNearestHospital(@Valid @RequestBody PatientAddressRequest patientAddressRequest){
-        return graphhopperService.getNearestHospital(patientAddressRequest, locationSearchPerimeterMeters);
+    public List<Hospital> getNearestHospital(@Valid @RequestBody PatientSearchRequest patientSearchRequest){
+         return graphhopperService.getNearestHospital(patientSearchRequest, locationSearchPerimeterMeters);
     }
 
 

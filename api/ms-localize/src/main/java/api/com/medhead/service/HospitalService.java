@@ -19,7 +19,7 @@ public class HospitalService {
 
     public List<Hospital> findHospitalWithinPerimeter(
             Double latitudeLeft, Double latitudeRight,
-            Double longitudeRight, Double longitudeLeft) {
-        return hospitalRepository.findHospitalWithinPerimeter(latitudeLeft, latitudeRight, longitudeRight, longitudeLeft);
+            Double longitudeRight, Double longitudeLeft, int specialityId) {
+        return hospitalRepository.findHospitalWithinPerimeterWithSpeciality(latitudeLeft, latitudeRight, longitudeRight, longitudeLeft, specialityId);
     }
 }

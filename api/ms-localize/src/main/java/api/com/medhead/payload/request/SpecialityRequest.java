@@ -5,10 +5,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
-public class SpecialityGroupRequest {
+public class SpecialityRequest {
     private String name;
     @NotNull
-    @Min(value = 0, message = "No specialty group chosen")
+    @Min(value = 0, message = "No specialty chosen")
     private int id;
 
     public int getId() {

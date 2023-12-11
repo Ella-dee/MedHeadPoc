@@ -10,11 +10,12 @@ import java.util.List;
 
 @Repository
 public interface HospitalRepository  extends JpaRepository<Hospital, Integer> {
-    @Query(value = "SELECT distinct * FROM hospital h WHERE (h.latitude between :latitudeRight and :latitudeLeft) AND (h.longitude between :longitudeRight and :longitudeLeft)", nativeQuery = true)
-    List<Hospital> findHospitalWithinPerimeter(
+    @Query(value = "SELECT distinct * FROM hospital h left join speciality_hospitals sh on  hospitals_id=h.id and sh.hospitals_id=:specialityId WHERE (h.latitude between :latitudeRight and :latitudeLeft) AND (h.longitude between :longitudeRight and :longitudeLeft) LIMIT 5", nativeQuery = true)
+    List<Hospital> findHospitalWithinPerimeterWithSpeciality(
             @Param("latitudeLeft") Double latitudeLeft,
             @Param("latitudeRight") Double latitudeRight,
             @Param("longitudeRight") Double longitudeRight,
-            @Param("longitudeLeft") Double longitudeLeft);
+            @Param("longitudeLeft") Double longitudeLeft,
+            @Param("specialityId") int specialityId);
 }
 

@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface SpecialityRepository extends JpaRepository<Speciality, Integer> {
-  List<Speciality> findByNameContaining(String name);
+  Speciality findByName(String name);
     List<Speciality> findBySpecialityGroupId(int groupId);
     List<Speciality> findBySpecialityGroupName(String name);
     Speciality findOneById(int id);

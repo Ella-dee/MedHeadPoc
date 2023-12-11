@@ -2,7 +2,7 @@ package api.com.medhead.service;
 
 import api.com.medhead.model.Hospital;
 import api.com.medhead.model.Location;
-import api.com.medhead.payload.request.PatientAddressRequest;
+import api.com.medhead.payload.request.PatientSearchRequest;
 import com.graphhopper.GHRequest;
 import com.graphhopper.GHResponse;
 import com.graphhopper.GraphHopper;
@@ -31,9 +31,9 @@ public class GraphhopperService {
     @Autowired
     HospitalService hospitalService;
 
-    public List<Hospital> getNearestHospital(PatientAddressRequest patientAddressRequest, int locationSearchPerimeterMeters){
+    public List<Hospital> getNearestHospital(PatientSearchRequest patientSearchRequest, int locationSearchPerimeterMeters){
         GraphHopper hopper = createGraphHopperInstance("ms-localize/src/main/resources/england-latest.osm.pbf");
-        List<Hospital> nearestHospitals = routing(hopper, patientAddressRequest.getLatitude(), patientAddressRequest.getLongitude(), locationSearchPerimeterMeters);
+        List<Hospital> nearestHospitals = routing(hopper, patientSearchRequest.getLatitude(), patientSearchRequest.getLongitude(), patientSearchRequest.getSpecialityId(), locationSearchPerimeterMeters);
         // release resources to properly shutdown or start a new instance
         hopper.close();
         return nearestHospitals;
@@ -56,9 +56,9 @@ public class GraphhopperService {
         return hopper;
     }
 
-    public List<Hospital> routing(GraphHopper hopper, Double latitude, Double longitude, int locationSearchPerimeterMeters) {
+    public List<Hospital> routing(GraphHopper hopper, Double latitude, Double longitude, int specialityId, int locationSearchPerimeterMeters) {
         Location myLoc = generateLocation(locationSearchPerimeterMeters, latitude, longitude);
-        List<Hospital> hospitals = hospitalService.findHospitalWithinPerimeter(myLoc.getLatitudeLeft(), myLoc.getLatitudeRight(), myLoc.getLongitudeRight(), myLoc.getLongitudeLeft());
+        List<Hospital> hospitals = hospitalService.findHospitalWithinPerimeter(myLoc.getLatitudeLeft(), myLoc.getLatitudeRight(), myLoc.getLongitudeRight(), myLoc.getLongitudeLeft(), specialityId);
         List<Hospital> hospitalListSortedByTime = new ArrayList<>();
 
         for (int i = 0; i <hospitals.size();++i) {

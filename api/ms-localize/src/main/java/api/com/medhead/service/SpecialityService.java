@@ -15,7 +15,11 @@ public class SpecialityService {
 
     public Speciality findOneById(int id){
        return  specialityRepository.findOneById(id);
-    }public Speciality save(Speciality speciality){
+    }
+    public Speciality getSpecialityByName(String name){
+        return specialityRepository.findByName(name);
+    }
+    public Speciality save(Speciality speciality){
        return  specialityRepository.save(speciality);
     }
     public List<Speciality> getSpecialities() {
