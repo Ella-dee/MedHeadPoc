@@ -43,7 +43,7 @@
           </div>
           
         <div class="alert alert-warning" *ngIf="f.submitted && !isSuccessful">
-          Info Registration failed!<br />{{ errorMessage }}
+          Hospital search failed!<br />{{ errorMessage }}
         </div>
         </form>
 
@@ -97,7 +97,15 @@
                     {{hospital.formattedDistanceInTime}}
                   </div>
                 </div>
-                <hr>                  
+                <hr>  
+                <div class="row">
+                  <div class="col-sm-4">
+                    <h6 class="mb-0">Available beds</h6>
+                  </div>
+                  <div class="col-sm-8 text-secondary">
+                    {{hospital.availableBeds}}
+                  </div>
+                </div>                
               </div>
             </div>
             </div>

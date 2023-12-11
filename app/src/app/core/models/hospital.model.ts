@@ -7,4 +7,5 @@ export class Hospital {
   latitude!: DoubleRange;
   formattedDistanceInKm!: string;
   formattedDistanceInTime!: string;
+  availableBeds!:number;
   }

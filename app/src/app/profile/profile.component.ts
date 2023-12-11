@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-
 import { TokenStorageService } from '../_services/token-storage.service';
 import { User } from '../core/models/user.model';
 import { UserService } from '../_services/user.service';
