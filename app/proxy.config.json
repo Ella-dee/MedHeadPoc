@@ -1,17 +1,17 @@
 {
-    "/api/auth/*": {
+    "/api/auth": {
         "target": "http://localhost:9004/",
         "secure": false,
         "changeOrigin": true,
         "logLevel": "debug"
     },    
-    "/api/users/*": {
+    "/api/users": {
         "target": "http://localhost:9004/",
         "secure": false,
         "changeOrigin": true,
         "logLevel": "debug"
     },
-    "/api/hospitals/*": {
+    "/api/hospitals": {
         "target": "http://localhost:9005/",
         "secure": false,
         "changeOrigin": true,

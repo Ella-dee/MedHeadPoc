@@ -13,28 +13,21 @@
             
             <div class="form-group col-lg-6">
               <label for="inputSpecialtyGroup">Specialty Group</label>
-              <select ng-init="" name="inputSpecialtyGroup" class="form-control wide" (change)="onChange($event)" (ngModel)="form.inputSpecialtyGroup" #inputSpecialtyGroup="ngModel" >
+              <select id="inputSpecialtyGroup" ng-init="" name="inputSpecialtyGroup" class="form-control wide" (change)="onChange($event)"
+               (ngModel)="form.inputSpecialtyGroup" #inputSpecialtyGroup="ngModel" >
+                <option value="null" selected>Please Select</option>
                 <option *ngFor="let speGroup of speGroups$" value={{speGroup.id}}>{{speGroup.name}}</option>
               </select>
             </div>
-
-            <!--            <mat-form-field class="form-group col-lg-6">
-              <mat-label for="inputSpecialtyGroup">Specialty Group</mat-label>
-             <mat-select ng-init="" name="inputSpecialtyGroup" class="form-control wide" (change)="onChange($event)" [(ngModel)]="form.inputSpecialtyGroup" #inputSpecialtyGroup="ngModel" >
-                @for (speGroup of speGroups$; track speGroup) {
-                  <mat-option value={{speGroup.id}}> {{speGroup.name}} </mat-option>
-                } 
-              </mat-select> 
-            -->
 
           </div>
           <div class="form-row ">
             <div class="form-group col-lg-6">
             </div>
             <div class="form-group col-lg-6">
-              <label for="inputSpecialtyGroup">Specialty</label>
-              <select name="inputSpecialty" class="form-control wide" [(ngModel)]="form.inputSpecialty" #inputSpecialty="ngModel">
-                <option *ngFor="let spe of specialties$" value={{spe.id}}>{{spe.name}}</option>
+              <label id="inputSpecialtyLabel" for="inputSpecialtyGroup">Specialty</label>
+              <select id="inputSpecialty" name="inputSpecialty" class="form-control wide" [(ngModel)]="form.inputSpecialty" #inputSpecialty="ngModel">
+                <option *ngFor="let spe of specialties$" value={{spe.id}} required>{{spe.name}}</option>
               </select>
             </div>
           </div>

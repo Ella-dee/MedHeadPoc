@@ -59,13 +59,17 @@ export class BookingComponent {
     this.userService.getAllSpecialityGroups().pipe(
       takeUntil(this.unsub$)).subscribe(
       (data)=>{
-        this.speGroups$ = data;
-        this.form = {inputSpecialtyGroup : this.speGroups$[0].id};
-        this.form = {inputSpecialty : this.specialties$[0].id};         
+        this.speGroups$ = data;        
         this.userService.getSpecialitiesBySpecialityGroupByName(this.speGroups$[0].name).subscribe(
       data => {
-        this.specialties$ = data;
-        this.form = {inputSpecialty : this.specialties$[0].id};
+        this.specialties$ = data;        
+        let speGroupSelectValue = document.getElementById("inputSpecialtyGroup")?.nodeValue;
+        let speSelect = document.getElementById("inputSpecialty");
+        let speSelectLabel = document.getElementById("inputSpecialtyLabel");
+        if(speGroupSelectValue==null){
+          speSelect?.setAttribute("style", "visibility:hidden");
+          speSelectLabel?.setAttribute("style", "visibility:hidden");          
+        }
       }
     );
   }
@@ -81,7 +85,16 @@ export class BookingComponent {
     this.userService.getSpecialitiesBySpecialityGroupById(parseInt(target.value)).subscribe(
       data => {
         this.specialties$ = data;
-        this.form = {inputSpecialty : this.specialties$[0].id};
+        let speSelect = document.getElementById("inputSpecialty");
+        let speSelectLabel = document.getElementById("inputSpecialtyLabel");
+        if(target.value==null || this.specialties$[0] === undefined){
+          speSelect?.setAttribute("style", "visibility:hidden");
+          speSelectLabel?.setAttribute("style", "visibility:hidden");
+        }else{
+          speSelect?.setAttribute("style", "visibility:visible");         
+          speSelect?.setAttribute("style", "visibility:visible");          
+          this.form = {inputSpecialty : this.specialties$[0].id};
+        }
       }
     )
   }
