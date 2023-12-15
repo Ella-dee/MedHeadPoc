@@ -4,6 +4,7 @@ import { UserService } from './_services/user.service';
 import { Subject, takeUntil } from 'rxjs';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -18,7 +19,7 @@ export class AppComponent implements OnInit {
   patient!: any;
   private readonly unsubscribe$ = new Subject();
 
-  constructor(private tokenStorageService: TokenStorageService, private userService: UserService,library: FaIconLibrary) { 
+  constructor(private tokenStorageService: TokenStorageService, private userService: UserService,library: FaIconLibrary, private router: Router) { 
     library.addIcons(faUser);
   }
  
@@ -44,7 +45,7 @@ export class AppComponent implements OnInit {
   }
 
   logout() {
-    this.tokenStorageService.signOut();
-    window.location.reload();
+    this.tokenStorageService.signOut();    
+    this.router.navigate(['/home']);
   }
 }

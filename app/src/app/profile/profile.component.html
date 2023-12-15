@@ -1,9 +1,9 @@
  <div class="container" *ngIf="currentUser; else loggedOut">
   <!-- Registered User with Info -->
     <div class="jumbotron" *ngIf="patient.address">
-      <h3 class="profileHeader">
+      <h2 class="profileHeader">
         <strong>{{ patient.lastName | uppercase }} {{ patient.firstName | titlecase }}</strong> 
-      </h3> 
+      </h2> 
   <div class="col-md-8 profileDetails">
     <div class="card mb-3">
       <div class="card-body">
@@ -88,7 +88,7 @@
                 <label for="firstName">FirstName</label>
               </div>
               <div class="col-sm-9 text-secondary">
-                <input type="text" class="form-control" name="firstName" [(ngModel)]="form.firstName" required #firstName="ngModel" placeholder="John"/> 
+                <input type="text" class="form-control" name="firstName" [(ngModel)]="form.firstName" required #firstName="ngModel" placeholder="Harry"/> 
                 <div class="alert-danger" *ngIf="f.submitted && firstName.invalid">
                 <div *ngIf="firstName.errors?.required">FirstName is required</div>
               </div>
@@ -99,7 +99,7 @@
                 <label for="lastName">LastName</label>
               </div>
               <div class="col-sm-9 text-secondary">
-                <input type="text" class="form-control" name="lastName" [(ngModel)]="form.lastName" required #lastName="ngModel" placeholder="Doe"/> 
+                <input type="text" class="form-control" name="lastName" [(ngModel)]="form.lastName" required #lastName="ngModel" placeholder="Windsor"/> 
                 <div class="alert-danger" *ngIf="f.submitted && lastName.invalid">
                 <div *ngIf="lastName.errors?.required">LastName is required</div>
               </div>
@@ -111,7 +111,7 @@
                 <label for="nhsNumber">NHS Number</label>
               </div>
               <div class="col-sm-9 text-secondary">
-                <input type="text" class="form-control" name="nhsNumber" [(ngModel)]="form.nhsNumber" required #nhsNumber="ngModel" placeholder="ZZ576137T"/> 
+                <input type="text" class="form-control" name="nhsNumber" [(ngModel)]="form.nhsNumber" required #nhsNumber="ngModel" placeholder="ZZ 767899 T"/> 
                 <div class="alert-danger" *ngIf="f.submitted && nhsNumber.invalid">
                 <div *ngIf="nhsNumber.errors?.required">NHS Number is required</div>
               </div>
@@ -123,7 +123,7 @@
                 <label for="birthdate">Birthdate</label>
               </div>
               <div class="col-sm-9 text-secondary">
-                <input type="text" class="form-control" name="birthdate" [(ngModel)]="form.birthdate" required #birthdate="ngModel" placeholder="1984-12-24"/> 
+                <input type="text" class="form-control" name="birthdate" [(ngModel)]="form.birthdate" required #birthdate="ngModel" placeholder="1971-02-21"/> 
                 <div class="alert-danger" *ngIf="f.submitted && birthdate.invalid">
                 <div *ngIf="birthdate.errors?.required">Birthdate is required</div>
               </div>
@@ -135,7 +135,7 @@
                 <label for="birthdate">Phone</label>
               </div>
               <div class="col-sm-9 text-secondary">
-                <input type="text" class="form-control" name="phone" [(ngModel)]="form.phone" #phone="ngModel" placeholder="0845 643 9215"/> 
+                <input type="text" class="form-control" name="phone" [(ngModel)]="form.phone" #phone="ngModel" placeholder="020 7287 7323"/> 
               </div>
             </div>  
 
@@ -144,7 +144,7 @@
                 <label for="address">Address</label>
               </div>
               <div class="col-sm-9 text-secondary">
-                <input type="text" class="form-control" name="address" [(ngModel)]="form.address" required #address="ngModel" placeholder="Margam Country Park"/> 
+                <input type="text" class="form-control" name="address" [(ngModel)]="form.address" required #address="ngModel" placeholder="41 Carnaby St"/> 
                 <div class="alert-danger" *ngIf="f.submitted && address.invalid">
                   <div *ngIf="address.errors?.required">Address is required</div>
                 </div>
@@ -156,7 +156,7 @@
                 <label for="postCode">PostCode</label>
               </div>
               <div class="col-sm-9 text-secondary">
-                <input type="text" class="form-control" name="postCode" [(ngModel)]="form.postCode" required #postCode="ngModel" placeholder="SA13 2TJ"/> 
+                <input type="text" class="form-control" name="postCode" [(ngModel)]="form.postCode" required #postCode="ngModel" placeholder="W1V 1PD"/> 
                 <div class="alert-danger" *ngIf="f.submitted && postCode.invalid">
                   <div *ngIf="postCode.errors?.required">PostCode is required</div>
                 </div>
@@ -168,7 +168,7 @@
                 <label for="city">City</label>
               </div>
               <div class="col-sm-9 text-secondary">
-                <input type="text" class="form-control" name="city" [(ngModel)]="form.city" required #city="ngModel" placeholder="Port Talbot"/> 
+                <input type="text" class="form-control" name="city" [(ngModel)]="form.city" required #city="ngModel" placeholder="London"/> 
                 <div class="alert-danger" *ngIf="f.submitted && postCode.invalid">
                   <div *ngIf="city.errors?.required">City is required</div>
                 </div>

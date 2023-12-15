@@ -57,7 +57,7 @@ public class PatientService {
         LocalDate birthdate = LocalDate.parse(date, formatter);
         p.setBirthdate(birthdate);
 
-        String patientAddress = URLEncoder.encode(p.getAddress() + " " + p.getCity() + " " + p.getPostCode());
+        String patientAddress = URLEncoder.encode(p.getAddress() + " " + p.getCity());
         String urlForGeolocalization = GEO_API_URL + patientAddress + "&key=" + GEO_API_KEY;
 
         JSONObject objectForCoordinates = getRouteObject(urlForGeolocalization);
@@ -65,25 +65,27 @@ public class PatientService {
         JSONArray hits = objectForCoordinates.getJSONArray("hits");
         for (int i = 0; i < hits.length(); i++) {
             JSONObject object = hits.getJSONObject(i);
-            String houseNb = object.get("housenumber").toString();
-            String pAddress = p.getAddress();
-            String substringAddress = pAddress.substring(Math.max(pAddress.length() - 2, 0));
-            if (substringAddress.equalsIgnoreCase("St")) {
-                pAddress = houseNb+" "+pAddress.substring(0, pAddress.length() - 2) + "Street";
-            }
-            if (pAddress.contains(object.get("street").toString()) && object.get("city").equals(p.getCity())) {
-                JSONObject point = (JSONObject) object.get("point");
-                String lat = point.get("lat").toString();
-                String lon = point.get("lng").toString();
-                if (lon.length() > 9) {
-                    lon = lon.substring(0, 9);
+            if(object.has("housenumber") && object.has("street")) {
+                String houseNb = object.get("housenumber").toString();
+                String pAddress = p.getAddress();
+                String substringAddress = pAddress.substring(Math.max(pAddress.length() - 2, 0));
+                if (substringAddress.equalsIgnoreCase("St")) {
+                    pAddress = houseNb+" "+pAddress.substring(0, pAddress.length() - 2) + "Street";
                 }
-                if (lat.length() > 9) {
-                    lat = lat.substring(0, 9);
+                if (pAddress.contains(object.get("street").toString()) && object.get("city").equals(p.getCity())) {
+                    JSONObject point = (JSONObject) object.get("point");
+                    String lat = point.get("lat").toString();
+                    String lon = point.get("lng").toString();
+                    if (lon.length() > 9) {
+                        lon = lon.substring(0, 9);
+                    }
+                    if (lat.length() > 9) {
+                        lat = lat.substring(0, 9);
+                    }
+                    p.setLatitude(Double.valueOf(lat));
+                    p.setLongitude(Double.valueOf(lon));
+                    patientRepository.save(p);
                 }
-                p.setLatitude(Double.valueOf(lat));
-                p.setLongitude(Double.valueOf(lon));
-                patientRepository.save(p);
             }
         }
         return p;
