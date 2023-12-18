@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Locale;
 
 import static api.com.medhead.utils.Utils.convertSecondsToTime;
+import static api.com.medhead.utils.Utils.generateLocation;
 import static java.lang.Math.PI;
 import static java.lang.Math.cos;
 
@@ -32,8 +33,9 @@ public class GraphhopperService {
     HospitalService hospitalService;
 
     public List<Hospital> getNearestHospital(PatientSearchRequest patientSearchRequest, int locationSearchPerimeterMeters){
-        GraphHopper hopper = createGraphHopperInstance("ms-localize/src/main/resources/england-latest.osm.pbf");
-        List<Hospital> nearestHospitals = routing(hopper, patientSearchRequest.getLatitude(), patientSearchRequest.getLongitude(), patientSearchRequest.getSpecialityId(), locationSearchPerimeterMeters);
+        GraphHopper hopper = createGraphHopperInstance("src/main/resources/england-latest.osm.pbf");
+        List<Hospital> hospitals = findHospitalsWithinPerimeter(locationSearchPerimeterMeters, patientSearchRequest.getLatitude(), patientSearchRequest.getLongitude(), patientSearchRequest.getSpecialityId());
+        List<Hospital> nearestHospitals = routing(hopper, patientSearchRequest.getLatitude(), patientSearchRequest.getLongitude(), hospitals);
         // release resources to properly shutdown or start a new instance
         hopper.close();
         return nearestHospitals;
@@ -56,10 +58,13 @@ public class GraphhopperService {
         return hopper;
     }
 
-    public List<Hospital> routing(GraphHopper hopper, Double latitude, Double longitude, int specialityId, int locationSearchPerimeterMeters) {
-        Location myLoc = generateLocation(locationSearchPerimeterMeters, latitude, longitude);
-        List<Hospital> hospitals = hospitalService.findHospitalWithinPerimeter(myLoc.getLatitudeLeft(), myLoc.getLatitudeRight(), myLoc.getLongitudeRight(), myLoc.getLongitudeLeft(), specialityId);
-        List<Hospital> hospitalListSortedByTime = new ArrayList<>();
+    public List<Hospital> findHospitalsWithinPerimeter(int meters, Double latitude, Double longitude, int specialityId){
+        Location myLoc = generateLocation(meters, latitude, longitude);
+        return hospitalService.findHospitalWithinPerimeter(myLoc.getLatitudeLeft(), myLoc.getLatitudeRight(), myLoc.getLongitudeRight(), myLoc.getLongitudeLeft(), specialityId);
+    }
+
+    public List<Hospital> routing(GraphHopper hopper, Double latitude, Double longitude, List<Hospital> hospitals) {
+       List<Hospital> hospitalListSortedByTime = new ArrayList<>();
 
         for (int i = 0; i <hospitals.size();++i) {
 
@@ -91,32 +96,4 @@ public class GraphhopperService {
         Collections.sort(hospitalListSortedByTime, Hospital.HospitalTimeComparator);
         return  hospitalListSortedByTime;
     }
-
-
-    private Location generateLocation(int meters, Double latitude, Double longitude){
-        Location myLoc = new Location();
-        myLoc.setLatitude(latitude);
-        myLoc.setLongitude(longitude);
-
-        //Earth’s radius, sphere
-        Double earthRadius=6378137.00;
-        //Coordinate offsets in radians
-        Double dLat = meters/earthRadius;
-        Double dLon = meters/(earthRadius*cos(PI*myLoc.getLatitude()/180));
-        //OffsetPosition, decimal degrees
-        myLoc.setLatitudeLeft(trimDouble(myLoc.getLatitude() + dLat * 180/PI));
-        myLoc.setLongitudeLeft(trimDouble(myLoc.getLongitude() + dLon * 180/PI));
-        myLoc.setLatitudeRight(trimDouble(myLoc.getLatitude() + -dLat * 180/PI));
-        myLoc.setLongitudeRight(trimDouble(myLoc.getLongitude() + -dLon * 180/PI));
-        return myLoc;
-    }
-
-    private Double trimDouble(Double longLat){
-        String longLatTrimmed = String.valueOf(longLat);
-        if(longLatTrimmed.length()>=8){
-            longLatTrimmed = longLatTrimmed.substring(0, 9);
-        }
-        return Double.valueOf(longLatTrimmed);
-    }
-
 }

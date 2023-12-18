@@ -42,13 +42,8 @@ public class NhsHospitalController {
     }
 
     @PostMapping("specialities")
-    public List<Speciality> getSpecialitiesBySpecialityGroupName(@Valid @RequestBody SpecialityGroupRequest specialityGroupRequest) {
+    public List<Speciality> getSpecialitiesBySpecialityGroup(@Valid @RequestBody SpecialityGroupRequest specialityGroupRequest) {
         return specialityService.getSpecialitiesBySpecialityGroupId(specialityGroupRequest.getId());
-    }
-
-    @PostMapping("speciality")
-    public Speciality getSpecialityByName(@Valid @RequestBody SpecialityGroupRequest specialityGroupRequest) {
-        return specialityService.findOneById(specialityGroupRequest.getId());
     }
 
     @GetMapping("speciality-groups")
@@ -63,7 +58,7 @@ public class NhsHospitalController {
 
     @PostMapping("getNearest")
     public List<Hospital> getNearestHospital(@Valid @RequestBody PatientSearchRequest patientSearchRequest){
-         return graphhopperService.getNearestHospital(patientSearchRequest, locationSearchPerimeterMeters);
+         return graphhopperService.getNearestHospital(patientSearchRequest, getPerimeter());
     }
 
 

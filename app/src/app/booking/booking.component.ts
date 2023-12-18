@@ -59,7 +59,7 @@ export class BookingComponent {
     this.userService.getAllSpecialityGroups().pipe(
       takeUntil(this.unsub$)).subscribe(
       (data)=>{
-        this.speGroups$ = data;        
+        this.speGroups$ = data;  
         this.userService.getSpecialitiesBySpecialityGroupByName(this.speGroups$[0].name).subscribe(
       data => {
         this.specialties$ = data;        

@@ -3,7 +3,6 @@ package api.com.medhead.service;
 import api.com.medhead.model.Hospital;
 import api.com.medhead.repository.HospitalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

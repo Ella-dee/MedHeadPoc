@@ -17,7 +17,6 @@ export class ProfileComponent implements OnInit {
   private readonly unsubscribe$ = new Subject();
   form: any = {};
   isSuccessful = false;
-  isLoggedIn = true;
   infoRegisteredFailed = false;
   errorMessage = '';
 
@@ -25,7 +24,6 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() {
     this.currentUser = this.token.getUser();
-    this.isLoggedIn = true;     
     this.registeredUser =this.userService.getUserByEmail(this.currentUser.email).pipe(
       takeUntil(this.unsubscribe$)).subscribe(
         (data) => {          

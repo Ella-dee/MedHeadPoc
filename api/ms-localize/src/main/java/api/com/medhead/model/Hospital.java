@@ -45,7 +45,7 @@ public class Hospital {
     @ManyToMany(mappedBy = "hospitals", cascade = CascadeType.REMOVE)
     private List<Speciality> specialities;
 
-    public Hospital(int id, String name, String address, String city, String postCode, double longitude, double latitude, String phone, String website, String email) {
+    public Hospital(int id, String name, String address, String city, String postCode, double longitude, double latitude, String phone, String website, String email, int availableBeds) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -56,6 +56,7 @@ public class Hospital {
         this.phone = phone;
         this.website = website;
         this.email = email;
+        this.availableBeds = availableBeds;
     }
 
     public Hospital() {
