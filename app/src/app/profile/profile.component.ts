@@ -19,10 +19,24 @@ export class ProfileComponent implements OnInit {
   isSuccessful = false;
   infoRegisteredFailed = false;
   errorMessage = '';
+  isLoggedIn = false;
+
 
   constructor(private token: TokenStorageService, private userService: UserService) { }
 
   ngOnInit() {
+    if (this.token.getToken()) {
+      this.isLoggedIn = true;
+      if( window.localStorage ){
+        if( !localStorage.getItem('firstLoad')){
+          localStorage['firstLoad'] = true;
+          window.location.reload();
+        }  
+        else{
+         localStorage.removeItem('firstLoad');
+        }
+      }
+    }
     this.currentUser = this.token.getUser();
     this.registeredUser =this.userService.getUserByEmail(this.currentUser.email).pipe(
       takeUntil(this.unsubscribe$)).subscribe(

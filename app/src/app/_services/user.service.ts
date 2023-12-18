@@ -66,11 +66,6 @@ getSpecialitiesBySpecialityGroupById(value:number): Observable<Specialty[]>{
   });
 }
 
-getSpecialityByName(value:string): Observable<Specialty>{
-  return this.http.post<Specialty>(API_LOC_URL+ 'speciality',{
-    name: value
-  });
-}
 
 getPerimeter(){
   return this.http.get(API_LOC_URL+ "perimeter");
