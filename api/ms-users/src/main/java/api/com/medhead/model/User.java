@@ -36,6 +36,12 @@ public class User {
         this.email = email;
     }
 
+    public User(Integer id, String password, String email) {
+        this.id = id;
+        this.password = password;
+        this.email = email;
+    }
+
     public User() {
     }
 

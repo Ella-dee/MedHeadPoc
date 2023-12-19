@@ -22,6 +22,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
+import static java.lang.Character.isDigit;
+
 @Service
 public class PatientService {
     @Autowired
@@ -42,7 +44,7 @@ public class PatientService {
         return patientRepository.save(patient);
     }
 
-    public Patient registerPatientInfo(RegisterInfoRequest registerInfoRequest) throws JSONException, IOException, InterruptedException {
+    public Patient setUpPatient(RegisterInfoRequest registerInfoRequest){
         Patient p = findPatientByEmail(registerInfoRequest.getEmail());
         p.setFirstName(registerInfoRequest.getFirstName());
         p.setLastName(registerInfoRequest.getLastName());
@@ -56,6 +58,30 @@ public class PatientService {
         String date = registerInfoRequest.getBirthdate();
         LocalDate birthdate = LocalDate.parse(date, formatter);
         p.setBirthdate(birthdate);
+        return p;
+    }
+
+    public String addressWithNumber(JSONObject object, String patientAddress) throws JSONException {
+        String houseNb = object.get("housenumber").toString();
+        String substringAddress = patientAddress.substring(Math.max(patientAddress.length() - 2, 0));
+        if (substringAddress.equalsIgnoreCase("St")) {
+            patientAddress = houseNb+" "+patientAddress.substring(0, patientAddress.length() - 2) + "Street";
+        }else {
+            patientAddress = houseNb+ " "+patientAddress;
+        }
+        return patientAddress;
+    }
+
+    public String addressWithoutNumber(JSONObject object, String patientAddress){
+        String substringAddress = patientAddress.substring(Math.max(patientAddress.length() - 2, 0));
+        if (substringAddress.equalsIgnoreCase("St")) {
+            patientAddress = patientAddress.substring(0, patientAddress.length() - 2) + "Street";
+        }
+        return patientAddress;
+    }
+
+    public Patient registerPatientInfo(RegisterInfoRequest registerInfoRequest) throws JSONException, IOException, InterruptedException {
+        Patient p = setUpPatient(registerInfoRequest);
 
         String patientAddress = URLEncoder.encode(p.getAddress() + " " + p.getCity());
         String urlForGeolocalization = GEO_API_URL + patientAddress + "&key=" + GEO_API_KEY;
@@ -63,17 +89,17 @@ public class PatientService {
         JSONObject objectForCoordinates = getRouteObject(urlForGeolocalization);
 
         JSONArray hits = objectForCoordinates.getJSONArray("hits");
+        String pAddress = "";
         for (int i = 0; i < hits.length(); i++) {
             JSONObject object = hits.getJSONObject(i);
-            if(object.has("housenumber") && object.has("street")) {
-                String houseNb = object.get("housenumber").toString();
-                String pAddress = p.getAddress();
-                String substringAddress = pAddress.substring(Math.max(pAddress.length() - 2, 0));
-                if (substringAddress.equalsIgnoreCase("St")) {
-                    pAddress = houseNb+" "+pAddress.substring(0, pAddress.length() - 2) + "Street";
-                }
-                if (pAddress.contains(object.get("street").toString()) && object.get("city").equals(p.getCity())) {
-                    JSONObject point = (JSONObject) object.get("point");
+            if(object.has("housenumber") && object.has("street") && isDigit(p.getAddress().charAt(0))) {
+               pAddress= addressWithNumber(object, p.getAddress());
+            }
+            else if(object.has("street")) {
+                pAddress = addressWithoutNumber(object, p.getAddress());
+            }
+            if (object.has("street") && pAddress.contains(object.get("street").toString()) && object.get("city").equals(p.getCity())) {
+                JSONObject point = (JSONObject) object.get("point");
                     String lat = point.get("lat").toString();
                     String lon = point.get("lng").toString();
                     if (lon.length() > 9) {
@@ -85,9 +111,9 @@ public class PatientService {
                     p.setLatitude(Double.valueOf(lat));
                     p.setLongitude(Double.valueOf(lon));
                     patientRepository.save(p);
+                    return p;
                 }
             }
-        }
         return p;
     }
 

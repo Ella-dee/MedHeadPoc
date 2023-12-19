@@ -1,16 +1,12 @@
 package api.com.medhead.controller;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
-import api.com.medhead.model.Patient;
+import java.util.List;
+import java.util.stream.Collectors;
 import api.com.medhead.payload.request.LoginRequest;
 import api.com.medhead.payload.request.SignupRequest;
 import api.com.medhead.payload.response.JwtResponse;
 import api.com.medhead.payload.response.MessageResponse;
-import api.com.medhead.repository.PatientRepository;
 import api.com.medhead.security.UserDetailsImpl;
 import api.com.medhead.service.AuthService;
 import api.com.medhead.service.RoleService;
@@ -27,11 +23,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import api.com.medhead.model.ERole;
-import api.com.medhead.model.Role;
-import api.com.medhead.model.User;
-import api.com.medhead.repository.RoleRepository;
-import api.com.medhead.repository.UserRepository;
 import api.com.medhead.security.jwt.JwtUtils;
 import jakarta.validation.Valid;
 

@@ -47,6 +47,22 @@ public class Patient {
         this.email = email;
     }
 
+    public Patient(Integer id, String firstName, String lastName, String address, String city, String postCode, double longitude, double latitude, String phone, String email, LocalDate birthdate, String socialSecurityNumber, User user) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.city = city;
+        this.postCode = postCode;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.phone = phone;
+        this.email = email;
+        this.birthdate = birthdate;
+        this.socialSecurityNumber = socialSecurityNumber;
+        this.user = user;
+    }
+
     public Patient() {
     }
 }
