@@ -33,7 +33,7 @@ public class GraphhopperService {
     HospitalService hospitalService;
 
     public List<Hospital> getNearestHospital(PatientSearchRequest patientSearchRequest, int locationSearchPerimeterMeters){
-        GraphHopper hopper = createGraphHopperInstance("src/main/resources/england-latest.osm.pbf");
+        GraphHopper hopper = createGraphHopperInstance("ms-localize/src/main/resources/england-latest.osm.pbf");
         List<Hospital> hospitals = findHospitalsWithinPerimeter(locationSearchPerimeterMeters, patientSearchRequest.getLatitude(), patientSearchRequest.getLongitude(), patientSearchRequest.getSpecialityId());
         List<Hospital> nearestHospitals = routing(hopper, patientSearchRequest.getLatitude(), patientSearchRequest.getLongitude(), hospitals);
         // release resources to properly shutdown or start a new instance
