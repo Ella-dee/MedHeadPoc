@@ -19,8 +19,8 @@
             #email="ngModel"
           />
           <div class="alert-danger" *ngIf="f.submitted && email.invalid">
-            <div *ngIf="email.errors?.required">Email is required</div>
-            <div *ngIf="email.errors?.email">
+            <div id="errorEmailEmpty" *ngIf="email.errors?.required">Email is required</div>
+            <div id="errorEmailInvalid" *ngIf="email.errors?.email">
               Email must be a valid email address
             </div>
           </div>
@@ -37,14 +37,14 @@
             #password="ngModel"
           />
           <div class="alert-danger" *ngIf="f.submitted && password.invalid">
-            <div *ngIf="password.errors?.required">Password is required</div>
-            <div *ngIf="password.errors?.minlength">
+            <div id="errorPasswordEmpry" *ngIf="password.errors?.required">Password is required</div>
+            <div id="errorPasswordInvalid" *ngIf="password.errors?.minlength">
               Password must be at least 6 characters
             </div>
           </div>
         </div>
         <div class="form-group">
-          <button class="btn btn-primary btn-block">Sign Up</button>
+          <button id="submit-btn" class="btn btn-primary btn-block">Sign Up</button>
         </div>
   
         <div class="alert alert-warning" *ngIf="f.submitted && isSignUpFailed">
