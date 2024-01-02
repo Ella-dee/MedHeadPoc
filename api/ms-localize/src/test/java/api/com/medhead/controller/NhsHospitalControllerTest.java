@@ -85,6 +85,8 @@ class NhsHospitalControllerTest {
 
     @Value("${location.search.perimeter.meters}")
     private int locationSearchPerimeters;
+    @Value("${osm.location}")
+    private String osmLocation;
 
     @BeforeEach
     void setup_Test(){

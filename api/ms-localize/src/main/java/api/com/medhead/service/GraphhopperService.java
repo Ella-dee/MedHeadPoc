@@ -11,6 +11,7 @@ import com.graphhopper.config.CHProfile;
 import com.graphhopper.config.Profile;
 import com.graphhopper.util.PointList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
@@ -28,12 +29,18 @@ import static java.lang.Math.cos;
 public class GraphhopperService {
 
     private static final DecimalFormat df = new DecimalFormat("0.00");
+    @Value("${osm.location}")
+    private String osmLocation;
 
     @Autowired
     HospitalService hospitalService;
 
+    public String getOsmLocation(){
+        return osmLocation;
+    }
+
     public List<Hospital> getNearestHospital(PatientSearchRequest patientSearchRequest, int locationSearchPerimeterMeters){
-        GraphHopper hopper = createGraphHopperInstance("ms-localize/src/main/resources/england-latest.osm.pbf");
+        GraphHopper hopper = createGraphHopperInstance(getOsmLocation());
         List<Hospital> hospitals = findHospitalsWithinPerimeter(locationSearchPerimeterMeters, patientSearchRequest.getLatitude(), patientSearchRequest.getLongitude(), patientSearchRequest.getSpecialityId());
         List<Hospital> nearestHospitals = routing(hopper, patientSearchRequest.getLatitude(), patientSearchRequest.getLongitude(), hospitals);
         // release resources to properly shutdown or start a new instance
