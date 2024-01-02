@@ -1,6 +1,6 @@
  <div class="container" *ngIf="currentUser; else loggedOut">
   <!-- Registered User with Info -->
-    <div class="jumbotron" *ngIf="patient.address">
+    <div class="jumbotron" *ngIf="address; else noInfoRegistered">
       <h2 class="profileHeader">
         <strong>{{ patient.lastName | uppercase }} {{ patient.firstName | titlecase }}</strong> 
       </h2> 
@@ -73,7 +73,8 @@
     </div>
     </div>
 <!-- Registered User without Info -->
-    <div class="jumbotron" *ngIf="!patient.address">
+<ng-template  #noInfoRegistered>
+    <div class="jumbotron">
       <h3 class="profileHeader">
         <strong>Register your info</strong> 
       </h3> 
@@ -190,7 +191,7 @@
       </form>
     </div>
   </div>
-
+</ng-template>
   </div>
   <ng-template #loggedOut>
     Please login.

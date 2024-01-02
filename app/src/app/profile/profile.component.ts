@@ -13,6 +13,7 @@ export class ProfileComponent implements OnInit {
   currentUser: any;
   @Input() user!: User;  
   patient!: any; 
+  address!: any;
   registeredUser!: any;
   private readonly unsubscribe$ = new Subject();
   form: any = {};
@@ -45,6 +46,7 @@ export class ProfileComponent implements OnInit {
       this.userService.getUserContent(this.registeredUser.id).subscribe(
         (data) => {
           this.patient = data;
+          this.address = this.patient.address;
         }
       );
         }
