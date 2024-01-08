@@ -5,7 +5,6 @@ import api.com.medhead.model.Speciality;
 import api.com.medhead.model.SpecialityGroup;
 import api.com.medhead.payload.request.PatientSearchRequest;
 import api.com.medhead.payload.request.SpecialityGroupRequest;
-import api.com.medhead.repository.HospitalRepository;
 import api.com.medhead.service.GraphhopperService;
 import api.com.medhead.service.HospitalService;
 import api.com.medhead.service.SpecialityGroupService;
@@ -61,6 +60,11 @@ public class NhsHospitalController {
     public List<Hospital> getNearestHospital(@Valid @RequestBody PatientSearchRequest patientSearchRequest){
          return graphhopperService.getNearestHospital(patientSearchRequest, getPerimeter());
     }
+    @PostMapping("bookBed/{hospitalId}")
+    public Optional<Hospital> bookBed(@PathVariable int hospitalId) {
+        return hospitalService.bookBed(hospitalId);
+    }
+
 
 
 

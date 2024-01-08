@@ -146,4 +146,8 @@ class NhsHospitalControllerTest {
                 // THEN
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
+
+    @Test
+    void bookBed() {
+    }
 }
