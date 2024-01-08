@@ -1,8 +1,11 @@
 package api.com.medhead.controller;
 
+import api.com.medhead.model.Hospital;
 import api.com.medhead.model.SpecialityGroup;
 import api.com.medhead.payload.request.PatientSearchRequest;
 import api.com.medhead.payload.request.SpecialityGroupRequest;
+import api.com.medhead.repository.HospitalRepository;
+import api.com.medhead.service.HospitalService;
 import api.com.medhead.service.SpecialityGroupService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,6 +28,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -43,6 +47,8 @@ class NhsHospitalControllerTest {
     private ObjectMapper objectMapper;
     @Autowired
     SpecialityGroupService specialityGroupService;
+    @Autowired
+    HospitalRepository hospitalRepository;
 
     private SpecialityGroupRequest specialityGroupRequest;
     private PatientSearchRequest patientSearchRequest;
@@ -148,6 +154,17 @@ class NhsHospitalControllerTest {
     }
 
     @Test
-    void bookBed() {
+    void bookBed() throws Exception{
+        Optional<Hospital> optHospital = hospitalRepository.findById(1144);
+        Hospital h = optHospital.get();
+        int availableBeds = h.getAvailableBeds();
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post(NhsHospitalController.PATH+"/bookBed/"+h.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                // THEN
+                .andExpect(MockMvcResultMatchers.status().isOk());
+        assertEquals(availableBeds-1, hospitalRepository.findById(1144).get().getAvailableBeds());
     }
 }
