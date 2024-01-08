@@ -39,7 +39,7 @@ public class Patient {
     private LocalDate birthdate;
     @Column (name= "ssnumber")
     private String socialSecurityNumber;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 

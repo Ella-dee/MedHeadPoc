@@ -1,111 +1,195 @@
 package api.com.medhead.controller;
 
+
 import api.com.medhead.model.ERole;
 import api.com.medhead.model.Patient;
 import api.com.medhead.model.Role;
 import api.com.medhead.model.User;
+import api.com.medhead.payload.request.LoginRequest;
 import api.com.medhead.payload.request.RegisterInfoRequest;
-import api.com.medhead.repository.PatientRepository;
-import api.com.medhead.repository.UserRepository;
+import api.com.medhead.payload.request.SignupRequest;
 import api.com.medhead.service.PatientService;
 import api.com.medhead.service.UserService;
-import org.json.JSONException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.json.JacksonJsonParser;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.core.Authentication;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.springframework.http.MediaType;
+import org.testcontainers.shaded.com.google.common.net.HttpHeaders;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import java.util.ArrayList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@RunWith(SpringRunner.class)
-@ExtendWith(MockitoExtension.class)
-class UserControllerTest {
+@Testcontainers
+class UserControllerTest extends ContainerBase{
 
     @Autowired
-    UserController userController;
+    private MockMvc mockMvc;
     @Autowired
-    UserService userService;
+    private ObjectMapper objectMapper;
     @Autowired
-    PatientService patientService;
+    private AuthController authController;
+    @Autowired
+    private PatientService patientService;
+    @Autowired
+    private UserService userService;
 
-    @MockBean
-    UserRepository userRepository;
-    @MockBean
-    PatientRepository patientRepository;
 
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-d");
     private String date1 = "1984-12-24";
     private LocalDate birthdate1 = LocalDate.parse(date1, formatter);
+    private SignupRequest signupRequest;
+    private RegisterInfoRequest registerInfoRequest;
+    private String username;
+    private String password;
 
-    private User u1 = new User(2,  "password", "bluebox@badwolfbay.com");
-    private User u2 = new User(4, "password","test@test.com");
-    private Patient p1 = new Patient (5,  "The", "Doctor", "Blue box st, Granville Road", "London", "SJ5 8UW",-0.163228,51.488953, "097379200348","bluebox@badwolfbay.com", birthdate1, "ZZZZ873", u1);
+    @BeforeAll
+    static void beforeAll() {
+    }
 
-    private Role role = new Role(ERole.ROLE_USER);
-    private Set<Role> roles  = new HashSet<>();
-    private List<User> userList=new ArrayList<>();
-    private RegisterInfoRequest registerInfoRequest = new RegisterInfoRequest();
+    protected String getAccessToken() throws Exception {
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("jackson.michell@test.com");
+        loginRequest.setPassword("password");
+        ResultActions result =  mockMvc.perform(MockMvcRequestBuilders
+                        .post(AuthController.PATH+"/signin")
+                        .content(objectMapper.writeValueAsString(loginRequest))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                // THEN
+                .andExpect(MockMvcResultMatchers.status().isOk());
+        String resultString = result.andReturn().getResponse().getContentAsString();
+        JacksonJsonParser jsonParser = new JacksonJsonParser();
+        return jsonParser.parseMap(resultString).get("accessToken").toString();
+    }
 
-    @BeforeEach
-    void setup_test(){
+    @AfterAll
+    static void afterAll() {
+        postgreSQLContainer.stop();
+    }
+
+    @Test
+    public void getUsersList() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get(UserController.PATH+"/all")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                // THEN
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void getPatient() throws Exception {
+        MvcResult userResult =  mockMvc.perform(MockMvcRequestBuilders
+                        .get(UserController.PATH+"/email/jackson.michell@test.com")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                // THEN
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn();
+
+        ObjectMapper userMapper = new ObjectMapper();
+        User user = userMapper.readValue(userResult.getResponse().getContentAsString(), User.class);
+        int userId = user.getId();
+        //String content = result.getResponse().getContentAsString();
+
+        MvcResult patientResult = mockMvc.perform(MockMvcRequestBuilders
+                        .get(UserController.PATH+"/"+userId)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                // THEN
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn();
+        ObjectMapper patientMapper = new ObjectMapper();
+        patientMapper.registerModule(new JavaTimeModule());
+        Patient patient = patientMapper.readValue(patientResult.getResponse().getContentAsString(), Patient.class);
+
+        assertEquals("Mitchell", patient.getLastName());
+        assertEquals("Jackson", patient.getFirstName());
+    }
+
+    @Test
+    public void getRegisteredUserTest() throws Exception {
+        User user = getRegisteredUser("jackson.michell@test.com");
+        assertEquals("jackson.michell@test.com", user.getEmail());
+        ArrayList<Role> roles = new ArrayList();
+        Role role = new Role(ERole.ROLE_USER);
         roles.add(role);
-        u1.setRoles(roles);
-        userList.add(u1);
-        userList.add(u2);
+        assertEquals(roles.get(0).getName(), user.getRoles().iterator().next().getName());
+    }
 
-        registerInfoRequest.setAddress(p1.getAddress());
-        registerInfoRequest.setCity(p1.getCity());
-        registerInfoRequest.setEmail(p1.getEmail());
-        registerInfoRequest.setFirstName(p1.getFirstName());
-        registerInfoRequest.setLastName(p1.getLastName());
-        registerInfoRequest.setPostCode(p1.getPostCode());
-        registerInfoRequest.setPhone(p1.getPhone());
-        registerInfoRequest.setNhsNumber(p1.getSocialSecurityNumber());
+    private User getRegisteredUser(String email) throws Exception{
+        MvcResult userResult =  mockMvc.perform(MockMvcRequestBuilders
+                        .get(UserController.PATH+"/email/"+email)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                // THEN
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn();
+        ObjectMapper userMapper = new ObjectMapper();
+        User user = userMapper.readValue(userResult.getResponse().getContentAsString(), User.class);
+        return user;
+    }
+
+    @Test
+    public void registerPatientInfo() throws Exception {
+        this.username="bluebox@badwolfbay.com";
+        this.password="password";
+        signupRequest = new SignupRequest();
+        signupRequest.setUsername(username);
+        signupRequest.setPassword(password);
+        this.authController.registerUser(signupRequest);
+        assertEquals(4, getRegisteredUser(this.username).getId());
+        assertEquals(this.username, patientService.getPatient(4).getEmail());
+
+        registerInfoRequest = new RegisterInfoRequest();
+        registerInfoRequest.setAddress("Blue box st, Granville Road");
+        registerInfoRequest.setCity("London");
+        registerInfoRequest.setFirstName("The");
+        registerInfoRequest.setLastName("Doctor");
+        registerInfoRequest.setPostCode("SJ5 8UW");
+        registerInfoRequest.setPhone("097379200348");
+        registerInfoRequest.setNhsNumber("ZZZZ873");
+        registerInfoRequest.setEmail(this.username);
         registerInfoRequest.setBirthdate(date1);
-    }
 
-    @Test
-    void getUsersList() {
-        when(userRepository.findAll()).thenReturn(userList);
-        List<User> users = userController.getUsersList();
-        assertEquals(2, users.size());
-    }
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post(UserController.PATH+"/patient")
+                        .content(objectMapper.writeValueAsString(registerInfoRequest))
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                // THEN
+                .andExpect(MockMvcResultMatchers.status().isOk());
 
-    @Test
-    void getPatient() {
-        when(patientRepository.findByUserId(p1.getUser().getId())).thenReturn(p1);
-        Patient p = userController.getPatient(u1.getId());
-        assertEquals("Doctor", p.getLastName());
-    }
-
-    @Test
-    void getRegisteredUser() {
-        when(userRepository.findByEmail(any())).thenReturn(Optional.ofNullable(u1));
-        Optional<User> user = userService.getRegisteredUser(u1.getEmail());
-        assertEquals("bluebox@badwolfbay.com", user.get().getEmail());
-    }
-
-    @Test
-    void registerPatientInfo() throws JSONException, IOException, InterruptedException {
-        when(patientRepository.findByEmail(u1.getEmail())).thenReturn(p1);
-        when(patientRepository.save(any())).thenReturn(p1);
-        Patient patient = patientService.registerPatientInfo(registerInfoRequest);
+        Patient patient = patientService.getPatient(4);
         assertEquals(51.532844, patient.getLatitude());
         assertEquals(-0.194594, patient.getLongitude());
     }

@@ -18,9 +18,9 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true", allowedHeaders = "*")
-@RequestMapping("/api/users")
+@RequestMapping(UserController.PATH)
 public class UserController {
-
+    public static final String PATH = "/api/users";
     @Autowired
     private UserService userService;
     @Autowired

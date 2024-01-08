@@ -28,9 +28,10 @@ import jakarta.validation.Valid;
 
 @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true", allowedHeaders = "*")
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping(AuthController.PATH)
 public class AuthController {
 
+    public static final String PATH = "/api/auth";
     @Autowired
     private AuthenticationManager authenticationManager;
 
