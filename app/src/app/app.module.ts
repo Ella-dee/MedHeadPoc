@@ -15,6 +15,8 @@ import { BookingComponent } from './booking/booking.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
+import {MatDialogModule} from '@angular/material/dialog';
+import { PopupComponent } from './popup/popup.component';
 
 
 @NgModule({
@@ -25,6 +27,7 @@ import {MatSelectModule} from '@angular/material/select';
     HomeComponent,
     ProfileComponent,
     BookingComponent,
+    PopupComponent,
   ],
   imports: [
     BrowserModule,
@@ -35,6 +38,7 @@ import {MatSelectModule} from '@angular/material/select';
     BrowserAnimationsModule,
     MatFormFieldModule,
     MatSelectModule,
+    MatDialogModule,
   ],
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent]

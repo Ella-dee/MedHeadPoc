@@ -35,8 +35,11 @@ getNearestHospital(search:any): Observable<Hospital[]>{
   });
 }
 
+bookBed(hospitalId:number): Observable<Hospital>{
+  return this.http.post<Hospital>(API_LOC_URL+'bookBed/'+hospitalId, "");
+}
+
 registerPatientInfo(patient:any): Observable<User> {
-  console.log(patient);
   return this.http.post<User>(API_URL + 'patient', {
     email: patient.email,
     firstName: patient.firstName,

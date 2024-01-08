@@ -7,6 +7,7 @@ import { TokenStorageService } from '../_services/token-storage.service';
 import { HttpClient } from '@angular/common/http';
 import { SpecialtyGroup } from '../core/models/specialty-group.model';
 import { Specialty } from '../core/models/specialty';
+import { PopupService } from '../popup/popup.service';
 
 const API_LOC_URL = '/api/hospitals/';
 
@@ -36,7 +37,7 @@ export class BookingComponent {
 
   private readonly unsub$ = new Subject();
   
-  constructor(private userService: UserService, private token: TokenStorageService, private http: HttpClient) { }
+  constructor(private popupService: PopupService, private userService: UserService, private token: TokenStorageService, private http: HttpClient) { }
 
   ngOnInit() {
     if (this.token.getToken()) {
@@ -119,5 +120,16 @@ export class BookingComponent {
       }
     );
     this.isSuccessful= true;
+  }
+
+  bookBed(hospitalId:number){
+    this.userService.bookBed(hospitalId).subscribe(
+      data => {
+        this.hospital = data;
+        this.popupService.openPopup();
+      }, err => {
+        this.errorMessage = err.error.message;
+      }
+    );
   }
 }

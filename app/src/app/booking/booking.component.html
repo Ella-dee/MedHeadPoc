@@ -61,7 +61,7 @@
                     <h4 class="mb-0">Name</h4>
                   </div>
                   <div class="col-sm-8 text-secondary">
-                    {{hospital.name}}
+                    {{hospital.name}} 
                   </div>
                 </div>
                 <hr>
@@ -97,9 +97,13 @@
                     <h4 class="mb-0">Available beds</h4>
                   </div>
                   <div class="col-sm-8 text-secondary">
-                    {{hospital.availableBeds}}
+                    {{hospital.availableBeds}} 
                   </div>
-                </div>                
+                </div> 
+                
+          <div class="btn-box">
+            <button class="btn btn-primary px-1" (click)="bookBed(hospital.id)">Book bed</button>
+          </div>               
               </div>
             </div>
             </div>
