@@ -62,6 +62,7 @@ class UserControllerTest extends ContainerBase{
 
     @BeforeAll
     static void beforeAll() {
+        postgreSQLContainer.start();
     }
 
     protected String getAccessToken() throws Exception {

@@ -17,8 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @RestController
-@RequestMapping("/api/hospitals")
+@RequestMapping(NhsHospitalController.PATH)
 public class NhsHospitalController {
+    public static final String PATH = "/api/hospitals";
     @Autowired
     HospitalService hospitalService;
     @Autowired
