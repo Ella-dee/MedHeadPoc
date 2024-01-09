@@ -9,6 +9,7 @@
     <packaging>pom</packaging>
     <properties>
         <java.version>17</java.version>
+        <sonar.projectKey>medheadpoc</sonar.projectKey>
     </properties>
     <parent>
         <groupId>org.springframework.boot</groupId>
