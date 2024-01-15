@@ -93,7 +93,7 @@ export class BookingComponent {
           speSelectLabel?.setAttribute("style", "visibility:hidden");
         }else{
           speSelect?.setAttribute("style", "visibility:visible");         
-          speSelect?.setAttribute("style", "visibility:visible");          
+          speSelectLabel?.setAttribute("style", "visibility:visible");          
           this.form = {inputSpecialty : this.specialties$[0].id};
         }
       }

@@ -60,7 +60,7 @@
                   <div class="col-sm-4">
                     <h4 class="mb-0">Name</h4>
                   </div>
-                  <div class="col-sm-8 text-secondary">
+                  <div class="col-sm-8 text-secondary"  id="{{ 'name' + hospital.id }}">
                     {{hospital.name}} 
                   </div>
                 </div>
@@ -69,7 +69,7 @@
                   <div class="col-sm-4">
                     <h4 class="mb-0">Address</h4>
                   </div>
-                  <div class="col-sm-8 text-secondary">
+                  <div class="col-sm-8 text-secondary" id="{{ 'address' + hospital.id }}">
                     {{hospital.address}}, {{hospital.postCode}}, {{hospital.city}}
                   </div>
                 </div>
@@ -78,7 +78,7 @@
                   <div class="col-sm-4">
                     <h4 class="mb-0">Distance in Km</h4>
                   </div>
-                  <div class="col-sm-8 text-secondary">
+                  <div class="col-sm-8 text-secondary" id="{{ 'kmDist' + hospital.id }}">
                     {{hospital.formattedDistanceInKm}}
                   </div>
                 </div>
@@ -87,7 +87,7 @@
                   <div class="col-sm-4">
                     <h4 class="mb-0">Distance in Time</h4>
                   </div>
-                  <div class="col-sm-8 text-secondary">
+                  <div class="col-sm-8 text-secondary" id="{{ 'timeDist' + hospital.id }}">
                     {{hospital.formattedDistanceInTime}}
                   </div>
                 </div>
@@ -96,13 +96,13 @@
                   <div class="col-sm-4">
                     <h4 class="mb-0">Available beds</h4>
                   </div>
-                  <div class="col-sm-8 text-secondary">
-                    {{hospital.availableBeds}} 
+                  <div class="col-sm-8 text-secondary" >
+                    <span id="{{ 'beds' + hospital.id }}" >{{hospital.availableBeds}} </span>
                   </div>
                 </div> 
                 
           <div class="btn-box">
-            <button class="btn btn-primary px-1" (click)="bookBed(hospital.id)">Book bed</button>
+            <button id="{{ 'book' + hospital.id }}" class="btn btn-primary px-1" (click)="bookBed(hospital.id)">Book bed</button>
           </div>               
               </div>
             </div>
