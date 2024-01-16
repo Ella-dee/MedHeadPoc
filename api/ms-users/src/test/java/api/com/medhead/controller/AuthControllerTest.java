@@ -11,9 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
@@ -22,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Testcontainers
-class AuthControllerTest extends ContainerBase{
+class AuthControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -32,16 +36,17 @@ class AuthControllerTest extends ContainerBase{
     private String username;
     private String password;
 
-    @BeforeAll
-    static void beforeAll() {
-        postgreSQLContainer.start();
-    }
+    @Container
+    public static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer("postgres:15-alpine");
 
-    @AfterAll
-    static void afterAll() {
-        postgreSQLContainer.stop();
-    }
 
+    @DynamicPropertySource
+    public static void properties(DynamicPropertyRegistry dynamicPropertyRegistry) {
+        dynamicPropertyRegistry.add("spring.datasource.url", postgreSQLContainer::getJdbcUrl);
+        dynamicPropertyRegistry.add("spring.datasource.username", postgreSQLContainer::getUsername);
+        dynamicPropertyRegistry.add("spring.datasource.password", postgreSQLContainer::getPassword);
+
+    }
     @BeforeEach
     void setup_test() {
         this.username = "test@test.com";

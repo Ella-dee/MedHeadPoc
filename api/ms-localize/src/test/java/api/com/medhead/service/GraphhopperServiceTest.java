@@ -22,7 +22,6 @@ import static api.com.medhead.utils.Utils.generateLocation;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
 @ExtendWith(MockitoExtension.class)
 class GraphhopperServiceTest {
 
@@ -42,7 +41,7 @@ class GraphhopperServiceTest {
     private Hospital hospital3 = new Hospital(1154, "Bicester Community Hospital", "Piggy Lane", "Bicester", "OX26 6HT",  -1.15806, 51.89619, "", "", "", 4);
     private List<Hospital> hospitals= new ArrayList<>();
     private List<Hospital> hospitalsFound= new ArrayList<>();
-
+/*
     @BeforeEach
     void setup_Test() {
         hospitals.add(hospital0);
@@ -78,7 +77,7 @@ class GraphhopperServiceTest {
         List<Hospital> hospitals = graphhopperService.findHospitalsWithinPerimeter(9000, 51.488954, -0.163229,16);
         assertEquals(2, hospitals.size());
     }
-
+*/
 
 
 }

@@ -65,15 +65,6 @@ class NhsHospitalControllerTest {
         dynamicPropertyRegistry.add("spring.datasource.password", postgreSQLContainer::getPassword);
 
     }
-    @BeforeAll
-    static void beforeAll() {
-        postgreSQLContainer.start();
-    }
-
-    @AfterAll
-    static void afterAll() {
-        postgreSQLContainer.stop();
-    }
 
     @Value("${location.search.perimeter.meters}")
     private int locationSearchPerimeters;

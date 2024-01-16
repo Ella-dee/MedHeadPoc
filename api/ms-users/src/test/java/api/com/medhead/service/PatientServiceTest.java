@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-@SpringBootTest
 @ExtendWith(MockitoExtension.class)
 class PatientServiceTest {
 

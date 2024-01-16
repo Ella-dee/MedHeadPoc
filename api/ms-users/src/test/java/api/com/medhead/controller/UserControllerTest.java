@@ -20,11 +20,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.json.JacksonJsonParser;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.springframework.http.MediaType;
 import org.testcontainers.shaded.com.google.common.net.HttpHeaders;
@@ -38,7 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Testcontainers
-class UserControllerTest extends ContainerBase{
+class UserControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -51,6 +55,17 @@ class UserControllerTest extends ContainerBase{
     @Autowired
     private UserService userService;
 
+    @Container
+    public static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer("postgres:15-alpine");
+
+
+    @DynamicPropertySource
+    public static void properties(DynamicPropertyRegistry dynamicPropertyRegistry) {
+        dynamicPropertyRegistry.add("spring.datasource.url", postgreSQLContainer::getJdbcUrl);
+        dynamicPropertyRegistry.add("spring.datasource.username", postgreSQLContainer::getUsername);
+        dynamicPropertyRegistry.add("spring.datasource.password", postgreSQLContainer::getPassword);
+
+    }
 
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-d");
     private String date1 = "1984-12-24";
@@ -60,10 +75,6 @@ class UserControllerTest extends ContainerBase{
     private String username;
     private String password;
 
-    @BeforeAll
-    static void beforeAll() {
-        postgreSQLContainer.start();
-    }
 
     protected String getAccessToken() throws Exception {
         LoginRequest loginRequest = new LoginRequest();
@@ -80,11 +91,6 @@ class UserControllerTest extends ContainerBase{
         String resultString = result.andReturn().getResponse().getContentAsString();
         JacksonJsonParser jsonParser = new JacksonJsonParser();
         return jsonParser.parseMap(resultString).get("accessToken").toString();
-    }
-
-    @AfterAll
-    static void afterAll() {
-        postgreSQLContainer.stop();
     }
 
     @Test
