@@ -12,25 +12,26 @@ import com.graphhopper.config.Profile;
 import com.graphhopper.util.PointList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-
 import static api.com.medhead.utils.Utils.convertSecondsToTime;
 import static api.com.medhead.utils.Utils.generateLocation;
-import static java.lang.Math.PI;
-import static java.lang.Math.cos;
 
 @Service
-public class GraphhopperService {
+public class GraphhopperService implements CommandLineRunner {
 
     private static final DecimalFormat df = new DecimalFormat("0.00");
     @Value("${osm.location}")
     private String osmLocation;
+    private GraphHopper hopper;
 
     @Autowired
     HospitalService hospitalService;
@@ -40,11 +41,11 @@ public class GraphhopperService {
     }
 
     public List<Hospital> getNearestHospital(PatientSearchRequest patientSearchRequest, int locationSearchPerimeterMeters){
-        GraphHopper hopper = createGraphHopperInstance(getOsmLocation());
+        //GraphHopper hopper = createGraphHopperInstance(getOsmLocation());
         List<Hospital> hospitals = findHospitalsWithinPerimeter(locationSearchPerimeterMeters, patientSearchRequest.getLatitude(), patientSearchRequest.getLongitude(), patientSearchRequest.getSpecialityId());
         List<Hospital> nearestHospitals = routing(hopper, patientSearchRequest.getLatitude(), patientSearchRequest.getLongitude(), hospitals);
         // release resources to properly shutdown or start a new instance
-        hopper.close();
+        //hopper.close();
         return nearestHospitals;
     }
 
@@ -102,5 +103,22 @@ public class GraphhopperService {
         }
         Collections.sort(hospitalListSortedByTime, Hospital.HospitalTimeComparator);
         return  hospitalListSortedByTime;
+    }
+
+    @Override
+    public void run(String... args) throws Exception {
+        hopper = new GraphHopper();
+        hopper.setOSMFile(getOsmLocation());
+        // specify where to store graphhopper files
+        hopper.setGraphHopperLocation("target/routing-graph-cache");
+
+        // see docs/core/profiles.md to learn more about profiles
+        hopper.setProfiles(new Profile("car").setVehicle("car").setWeighting("fastest").setTurnCosts(false));
+
+        // this enables speed mode for the profile we called car
+        hopper.getCHPreparationHandler().setCHProfiles(new CHProfile("car"));
+
+        // now this can take minutes if it imports or a few seconds for loading of course this is dependent on the area you import
+        hopper.importOrLoad();
     }
 }

@@ -1,5 +1,6 @@
 package api.com.medhead;
 
+import com.graphhopper.GraphHopper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
@@ -10,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
 public class MsLocalizeApplication
 {
     public static void main(String[] args) {
-
         SpringApplication.run(MsLocalizeApplication.class, args);
     }
 }
