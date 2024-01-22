@@ -51,8 +51,12 @@ public class UserController {
         try{
             p = patientService.registerPatientInfo(registerInfoRequest);
         }catch (Exception e){
+            String msg =e.getMessage();
             Throwable t = e.getCause();
-            return ResponseEntity.badRequest().body(new MessageResponse(t.getCause().toString()));
+            if(t.getCause() != null) {
+                msg = t.getCause().toString();
+            }
+            return ResponseEntity.badRequest().body(new MessageResponse(msg));
         }
         if (p.getLatitude()==0){
             return ResponseEntity.badRequest().body(new MessageResponse("The address could not be geolocalized"));
