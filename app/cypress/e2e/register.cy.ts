@@ -2,25 +2,32 @@ describe('Patient Register', () => {
   it('It registers user and patient info', () => {
     cy.visit('/')
     cy.contains('Sign Up').click()
-    //KO    
+    //KO signup
     cy.get('[name="email"]').type('harry')   
     cy.get('[name="form"]').submit()
     cy.contains('Email must be a valid email address')
     cy.contains('Password is required')
     //OK
+    cy.get('[name="email"]').clear()
     cy.get('[name="email"]').type('harry@windsor.uk')   
     cy.get('[name="password"]').type('password')  
     cy.get('[name="form"]').submit()
     cy.url().should('include', '/login')
     cy.login('harry@windsor.uk', 'password')
+    //KO register infos
     cy.get('[name="firstName"]').type('harry')
     cy.get('[name="lastName"]').type('windsor')    
-    cy.get('[name="nhsNumber"]').type('ZZ 767899 T')
+    cy.get('[name="nhsNumber"]').type('ZZ576137T')
     cy.get('[name="birthdate"]').type('1971-02-21')
     cy.get('[name="phone"]').type('020 7287 7323')
     cy.get('[name="address"]').type('41 Carnaby St')
     cy.get('[name="postCode"]').type('W1V 1PD')
     cy.get('[name="city"]').type('London')       
+    cy.get('[name="form"]').submit()
+    cy.contains('La clé « (ssnumber)=(ZZ576137T) » existe déjà.')
+    //OK
+    cy.get('[name="nhsNumber"]').clear()     
+    cy.get('[name="nhsNumber"]').type('ZZ 767899 T')    
     cy.get('[name="form"]').submit()
     cy.contains('harry')
     cy.contains('windsor')    
