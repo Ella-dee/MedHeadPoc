@@ -6,13 +6,18 @@ import api.com.medhead.payload.request.RegisterInfoRequest;
 import api.com.medhead.payload.response.MessageResponse;
 import api.com.medhead.service.PatientService;
 import api.com.medhead.service.UserService;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
+import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,7 +47,13 @@ public class UserController {
 
     @PostMapping("/patient")
     public ResponseEntity<?> registerPatientInfo(@Valid @RequestBody RegisterInfoRequest registerInfoRequest) throws JSONException, IOException, InterruptedException {
-        Patient p = patientService.registerPatientInfo(registerInfoRequest);
+        Patient p = new Patient();
+        try{
+            p = patientService.registerPatientInfo(registerInfoRequest);
+        }catch (Exception e){
+            Throwable t = e.getCause();
+            return ResponseEntity.badRequest().body(new MessageResponse(t.getCause().toString()));
+        }
         if (p.getLatitude()==0){
             return ResponseEntity.badRequest().body(new MessageResponse("The address could not be geolocalized"));
         }
