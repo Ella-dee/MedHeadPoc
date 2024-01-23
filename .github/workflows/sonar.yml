@@ -19,7 +19,10 @@ jobs:
   sonar:
     name: SonarCloud analysis
     runs-on: ubuntu-latest
-    permissions: read-all
+    defaults:
+      run:
+        working-directory: ./api
+    permissions: read-all      
     steps:
       - uses: actions/checkout@v3
         with:
