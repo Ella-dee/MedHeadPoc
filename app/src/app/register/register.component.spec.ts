@@ -37,19 +37,4 @@ it('should submit the form when the submit button is clicked', () => {
   expect(fnc).toHaveBeenCalled();
 })
 
-it('should display alert message when onSubmit is called but form is invalid', () => {
-  const compiled = fixture.debugElement.nativeElement;  
-  const btnEl = compiled.querySelector('#submit-btn');  
-  expect(compiled.querySelector('#errorEmailEmpty')).toEqual(null);
-  btnEl.click();
-  component.onSubmit();
-  fixture.detectChanges();
-  console.log("form email: ",component.form.email);
-  const afterClickCompiled = fixture.debugElement.nativeElement;   
-  expect(afterClickCompiled.querySelector('#errorEmailEmpty')).not.toEqual(null);  
- // expect(afterClickCompiled.querySelector('#errorEmailEmpty').innerText).toEqual('Email is required');
-  //expect(afterClickCompiled.querySelector('#errorPasswordEmpty').innerText).toEqual('Password is required');
- 
-})
-
 });

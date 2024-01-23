@@ -85,7 +85,7 @@ class UserControllerTest {
                         .content(objectMapper.writeValueAsString(loginRequest))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
+                .andDo(MockMvcResultHandlers.print())
                 // THEN
                 .andExpect(MockMvcResultMatchers.status().isOk());
         String resultString = result.andReturn().getResponse().getContentAsString();
@@ -100,7 +100,7 @@ class UserControllerTest {
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
+                .andDo(MockMvcResultHandlers.print())
                 // THEN
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
@@ -112,7 +112,7 @@ class UserControllerTest {
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
+                .andDo(MockMvcResultHandlers.print())
                 // THEN
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn();
@@ -127,7 +127,7 @@ class UserControllerTest {
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
+                .andDo(MockMvcResultHandlers.print())
                 // THEN
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn();
@@ -135,18 +135,18 @@ class UserControllerTest {
         patientMapper.registerModule(new JavaTimeModule());
         Patient patient = patientMapper.readValue(patientResult.getResponse().getContentAsString(), Patient.class);
 
-        assertEquals("Mitchell", patient.getLastName());
-        assertEquals("Jackson", patient.getFirstName());
+        Assertions.assertEquals("Mitchell", patient.getLastName());
+        Assertions.assertEquals("Jackson", patient.getFirstName());
     }
 
     @Test
     public void getRegisteredUserTest() throws Exception {
         User user = getRegisteredUser("jackson.michell@test.com");
-        assertEquals("jackson.michell@test.com", user.getEmail());
+        Assertions.assertEquals("jackson.michell@test.com", user.getEmail());
         ArrayList<Role> roles = new ArrayList();
         Role role = new Role(ERole.ROLE_USER);
         roles.add(role);
-        assertEquals(roles.get(0).getName(), user.getRoles().iterator().next().getName());
+        Assertions.assertEquals(roles.get(0).getName(), user.getRoles().iterator().next().getName());
     }
 
     private User getRegisteredUser(String email) throws Exception{
@@ -155,7 +155,7 @@ class UserControllerTest {
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
+                .andDo(MockMvcResultHandlers.print())
                 // THEN
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn();
@@ -172,8 +172,8 @@ class UserControllerTest {
         signupRequest.setUsername(username);
         signupRequest.setPassword(password);
         this.authController.registerUser(signupRequest);
-        assertEquals(4, getRegisteredUser(this.username).getId());
-        assertEquals(this.username, patientService.getPatient(4).getEmail());
+        Assertions.assertEquals(4, getRegisteredUser(this.username).getId());
+        Assertions.assertEquals(this.username, patientService.getPatient(4).getEmail());
 
         registerInfoRequest = new RegisterInfoRequest();
         registerInfoRequest.setAddress("Blue box st, Granville Road");
@@ -192,12 +192,12 @@ class UserControllerTest {
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
+                .andDo(MockMvcResultHandlers.print())
                 // THEN
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
         Patient patient = patientService.getPatient(4);
-        assertEquals(51.532844, patient.getLatitude());
-        assertEquals(-0.194594, patient.getLongitude());
+        Assertions.assertEquals(51.532844, patient.getLatitude());
+        Assertions.assertEquals(-0.194594, patient.getLongitude());
     }
 }
