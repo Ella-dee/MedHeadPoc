@@ -60,5 +60,6 @@ class AuthServiceTest {
         when(roleService.findByName(any())).thenReturn(Optional.ofNullable(role));
         when(patientService.save(any())).thenReturn(patient);
         authService.signupUser(signupRequest);
+        assertEquals(signupRequest.getUsername(), patient.getEmail());
     }
 }

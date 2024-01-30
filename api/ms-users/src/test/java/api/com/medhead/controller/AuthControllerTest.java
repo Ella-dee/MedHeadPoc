@@ -75,10 +75,11 @@ class AuthControllerTest {
     @Test
     public void authenticateUser() throws Exception {
         // GIVEN
-
         mockMvc.perform(MockMvcRequestBuilders
-                .post(AuthController.PATH+"/signup")
-                .content(objectMapper.writeValueAsString(signupRequest)));
+                        .post(AuthController.PATH+"/signup")
+                        .content(objectMapper.writeValueAsString(signupRequest))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON));
 
         // WHEN
         LoginRequest loginRequest = new LoginRequest();
