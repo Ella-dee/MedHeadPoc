@@ -31,6 +31,9 @@ public class GraphhopperService implements CommandLineRunner {
     private static final DecimalFormat df = new DecimalFormat("0.00");
     @Value("${osm.location}")
     private String osmLocation;
+    @Value("${target.cache.location}")
+    private String cacheLocation;
+
     private GraphHopper hopper;
 
     @Autowired
@@ -39,31 +42,12 @@ public class GraphhopperService implements CommandLineRunner {
     public String getOsmLocation(){
         return osmLocation;
     }
+    public String getCacheLocation(){return cacheLocation;}
 
     public List<Hospital> getNearestHospital(PatientSearchRequest patientSearchRequest, int locationSearchPerimeterMeters){
-        //GraphHopper hopper = createGraphHopperInstance(getOsmLocation());
         List<Hospital> hospitals = findHospitalsWithinPerimeter(locationSearchPerimeterMeters, patientSearchRequest.getLatitude(), patientSearchRequest.getLongitude(), patientSearchRequest.getSpecialityId());
         List<Hospital> nearestHospitals = routing(hopper, patientSearchRequest.getLatitude(), patientSearchRequest.getLongitude(), hospitals);
-        // release resources to properly shutdown or start a new instance
-        //hopper.close();
         return nearestHospitals;
-    }
-
-    static GraphHopper createGraphHopperInstance(String ghLoc) {
-        GraphHopper hopper = new GraphHopper();
-        hopper.setOSMFile(ghLoc);
-        // specify where to store graphhopper files
-        hopper.setGraphHopperLocation("target/routing-graph-cache");
-
-        // see docs/core/profiles.md to learn more about profiles
-        hopper.setProfiles(new Profile("car").setVehicle("car").setWeighting("fastest").setTurnCosts(false));
-
-        // this enables speed mode for the profile we called car
-        hopper.getCHPreparationHandler().setCHProfiles(new CHProfile("car"));
-
-        // now this can take minutes if it imports or a few seconds for loading of course this is dependent on the area you import
-        hopper.importOrLoad();
-        return hopper;
     }
 
     public List<Hospital> findHospitalsWithinPerimeter(int meters, Double latitude, Double longitude, int specialityId){
@@ -110,7 +94,7 @@ public class GraphhopperService implements CommandLineRunner {
         hopper = new GraphHopper();
         hopper.setOSMFile(getOsmLocation());
         // specify where to store graphhopper files
-        hopper.setGraphHopperLocation("target/routing-graph-cache");
+        hopper.setGraphHopperLocation(getCacheLocation());
 
         // see docs/core/profiles.md to learn more about profiles
         hopper.setProfiles(new Profile("car").setVehicle("car").setWeighting("fastest").setTurnCosts(false));
