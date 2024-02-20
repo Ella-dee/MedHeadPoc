@@ -16,12 +16,8 @@ Afin de pouvoir exécuter l'application sur votre poste, vous devez d'abord inst
 Créer une nouvelle base de données sous PgAdmin nommée 'medhead-users'.
 Créer une nouvelle base de données sous PgAdmin nommée 'medhead-hospitals'.
 
-Télécharger le fichier "england-latest.osm.pbf" à l'adresse suivante: https://download.openstreetmap.fr/extracts/europe/united_kingdom/
-Puis placer le dans le module ms-localize: src/main/resources/
-
 ### Execution
-1. Dans l'éditeur de code Java, lancer l'application 'MsUsersApplication'.
-2. Jouer le script 'src/main/resources/sql/data.sql' dans la base de données 'medhead-users'.
+1. Dans l'éditeur de code Java, lancer les applications 'MsUsersApplication' et 'MsLocalizeApplication'.
 3. Dans un autre terminal, se rendre dans l'application front 'app', lancer la commande suivante :
 ```bash
 npm run start
