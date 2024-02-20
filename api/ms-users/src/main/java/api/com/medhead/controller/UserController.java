@@ -46,7 +46,7 @@ public class UserController {
     }
 
     @PostMapping("/patient")
-    public ResponseEntity<?> registerPatientInfo(@Valid @RequestBody RegisterInfoRequest registerInfoRequest) throws JSONException, IOException, InterruptedException {
+    public ResponseEntity<?> registerPatientInfo(@Valid @RequestBody RegisterInfoRequest registerInfoRequest) {
         Patient p = new Patient();
         try{
             p = patientService.registerPatientInfo(registerInfoRequest);

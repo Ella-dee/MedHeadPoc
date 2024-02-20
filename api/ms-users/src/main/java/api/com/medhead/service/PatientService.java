@@ -9,6 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -29,7 +30,8 @@ public class PatientService {
     @Autowired
     private PatientRepository patientRepository;
 
-    private final String GEO_API_KEY = "2ed374a9-4d97-4d99-b892-a8063032d84b";
+    @Value("${API_KEY}")
+    private String GEO_API_KEY;
     private final String GEO_API_URL = "https://graphhopper.com/api/1/geocode?q=";
 
     public Patient getPatient(int userId) {

@@ -12,10 +12,13 @@ import api.com.medhead.service.PatientService;
 import api.com.medhead.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import jakarta.validation.constraints.AssertTrue;
+import org.json.JSONObject;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.json.JacksonJsonParser;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -36,7 +39,8 @@ import org.testcontainers.shaded.com.google.common.net.HttpHeaders;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @SpringBootTest
@@ -199,5 +203,42 @@ class UserControllerTest {
         Patient patient = patientService.getPatient(4);
         assertEquals(51.532844, patient.getLatitude());
         assertEquals(-0.194594, patient.getLongitude());
+    }
+    @Test
+    public void registerPatientInfo_KO() throws Exception {
+        this.username="hello@sweetie.com";
+        this.password="password";
+        signupRequest = new SignupRequest();
+        signupRequest.setUsername(username);
+        signupRequest.setPassword(password);
+        this.authController.registerUser(signupRequest);
+        assertEquals(4, getRegisteredUser(this.username).getId());
+        assertEquals(this.username, patientService.getPatient(4).getEmail());
+
+        registerInfoRequest = new RegisterInfoRequest();
+        registerInfoRequest.setAddress("Blue box st, Granville Road");
+        registerInfoRequest.setCity("London");
+        registerInfoRequest.setFirstName("The");
+        registerInfoRequest.setLastName("Doctor");
+        registerInfoRequest.setPostCode("SJ5 8UW");
+        registerInfoRequest.setPhone("097379200348");
+        registerInfoRequest.setNhsNumber("ZZ361112T");
+        registerInfoRequest.setEmail(this.username);
+        registerInfoRequest.setBirthdate(date1);
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders
+                        .post(UserController.PATH+"/patient")
+                        .content(objectMapper.writeValueAsString(registerInfoRequest))
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                // THEN
+                .andExpect(MockMvcResultMatchers.status().is(400))
+                .andReturn();
+                //org.postgresql.util.PSQLException: ERROR: duplicate key value violates unique constraint \\\"patients_ssnumber_key\\\"\\n  DÃ©tailÂ : Key (ssnumber)=(ZZ361112T) already exists.\"}"));
+        String message = result.getResponse().getContentAsString();
+       assertTrue(message.contains("PSQLException: ERROR: duplicate key value violates unique constraint"));
+       assertTrue(message.contains("Key (ssnumber)=(ZZ361112T) already exists"));
     }
 }
