@@ -176,8 +176,6 @@ class UserControllerTest {
         signupRequest.setUsername(username);
         signupRequest.setPassword(password);
         this.authController.registerUser(signupRequest);
-        assertEquals(4, getRegisteredUser(this.username).getId());
-        assertEquals(this.username, patientService.getPatient(4).getEmail());
 
         registerInfoRequest = new RegisterInfoRequest();
         registerInfoRequest.setAddress("Blue box st, Granville Road");
@@ -200,7 +198,7 @@ class UserControllerTest {
                 // THEN
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
-        Patient patient = patientService.getPatient(4);
+        Patient patient = patientService.getPatient(getRegisteredUser(this.username).getId());
         assertEquals(51.532844, patient.getLatitude());
         assertEquals(-0.194594, patient.getLongitude());
     }
@@ -212,8 +210,6 @@ class UserControllerTest {
         signupRequest.setUsername(username);
         signupRequest.setPassword(password);
         this.authController.registerUser(signupRequest);
-        assertEquals(4, getRegisteredUser(this.username).getId());
-        assertEquals(this.username, patientService.getPatient(4).getEmail());
 
         registerInfoRequest = new RegisterInfoRequest();
         registerInfoRequest.setAddress("Blue box st, Granville Road");

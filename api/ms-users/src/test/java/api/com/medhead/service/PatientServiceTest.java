@@ -97,7 +97,7 @@ class PatientServiceTest {
         JSONObject json = new JSONObject();
         json.put("street","21 jump St");
 
-        String patientAddress2 = patientService.addressWithoutNumber(json, "21 jump St");
+        String patientAddress2 = patientService.addressWithNumber(json, "21 jump St");
         assertEquals("21 jump Street", patientAddress2);
 
    }
@@ -114,7 +114,5 @@ class PatientServiceTest {
         json.put("street","Bad Wolf St");
         String patientAddress2 = patientService.addressWithoutNumber(json2, "Bad Wolf St");
         assertEquals("Bad Wolf Street", patientAddress2);
-
-
     }
 }
