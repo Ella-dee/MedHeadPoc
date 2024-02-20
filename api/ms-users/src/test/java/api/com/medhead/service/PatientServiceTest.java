@@ -95,9 +95,10 @@ class PatientServiceTest {
     @Test
     void addressWithNumber() throws JSONException {
         JSONObject json = new JSONObject();
-        json.put("street","21 jump St");
+        json.put("street","jump St");
+        json.put("housenumber", "21");
 
-        String patientAddress2 = patientService.addressWithNumber(json, "21 jump St");
+        String patientAddress2 = patientService.addressWithNumber(json, "jump St");
         assertEquals("21 jump Street", patientAddress2);
 
    }
