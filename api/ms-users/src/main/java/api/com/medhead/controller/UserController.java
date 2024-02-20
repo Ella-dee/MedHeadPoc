@@ -56,6 +56,7 @@ public class UserController {
             if(t.getCause() != null) {
                 msg = t.getCause().toString();
             }
+            Thread.currentThread().interrupt();
             return ResponseEntity.badRequest().body(new MessageResponse(msg));
         }
         if (p.getLatitude()==0){

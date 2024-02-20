@@ -232,9 +232,8 @@ class UserControllerTest {
                 // THEN
                 .andExpect(MockMvcResultMatchers.status().is(400))
                 .andReturn();
-                //org.postgresql.util.PSQLException: ERROR: duplicate key value violates unique constraint \\\"patients_ssnumber_key\\\"\\n  DÃ©tailÂ : Key (ssnumber)=(ZZ361112T) already exists.\"}"));
         String message = result.getResponse().getContentAsString();
-       assertTrue(message.contains("PSQLException: ERROR: duplicate key value violates unique constraint"));
-       assertTrue(message.contains("Key (ssnumber)=(ZZ361112T) already exists"));
+        assertTrue(message.contains("PSQLException: ERROR: duplicate key value violates unique constraint"));
+        assertTrue(message.contains("Key (ssnumber)=(ZZ361112T) already exists"));
     }
 }
