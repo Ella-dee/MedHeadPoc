@@ -1,17 +1,15 @@
 package api.com.medhead.service;
 
 import api.com.medhead.model.Patient;
-import api.com.medhead.model.User;
 import api.com.medhead.payload.request.RegisterInfoRequest;
 import api.com.medhead.repository.PatientRepository;
-import api.com.medhead.repository.UserRepository;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.URLEncoder;
@@ -20,9 +18,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Optional;
-
 import static java.lang.Character.isDigit;
 
 @Service
@@ -30,8 +25,7 @@ public class PatientService {
     @Autowired
     private PatientRepository patientRepository;
 
-    @Value("${API_KEY}")
-    private String GEO_API_KEY;
+    private final String GEO_KEY = "2ed374a9-4d97-4d99-b892-a8063032d84b";
     private final String GEO_API_URL = "https://graphhopper.com/api/1/geocode?q=";
 
     public Patient getPatient(int userId) {
@@ -86,10 +80,9 @@ public class PatientService {
         Patient p = setUpPatient(registerInfoRequest);
 
         String patientAddress = URLEncoder.encode(p.getAddress() + " " + p.getCity());
-        String urlForGeolocalization = GEO_API_URL + patientAddress + "&key=" + GEO_API_KEY;
+        String urlForGeolocalization = GEO_API_URL + patientAddress + "&key=" + GEO_KEY;
 
         JSONObject objectForCoordinates = getRouteObject(urlForGeolocalization);
-
         JSONArray hits = objectForCoordinates.getJSONArray("hits");
         String pAddress = "";
         for (int i = 0; i < hits.length(); i++) {

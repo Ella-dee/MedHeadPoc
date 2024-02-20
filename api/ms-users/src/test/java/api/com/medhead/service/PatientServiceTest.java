@@ -58,7 +58,7 @@ class PatientServiceTest {
         registerInfoRequest.setLastName("Lloyd");
         registerInfoRequest.setPostCode("SW1Y 6QY");
         registerInfoRequest.setPhone("020 7839 8831");
-        registerInfoRequest.setNhsNumber("ZZ576137T");
+        registerInfoRequest.setNhsNumber("ZZ57VJS7T");
         registerInfoRequest.setBirthdate(date1);
     }
 
