@@ -8,7 +8,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.net.URI;
@@ -31,7 +30,6 @@ public class PatientService {
     public Patient getPatient(int userId) {
         return patientRepository.findByUserId(userId);
     }
-
     public Patient findPatientByEmail(String email) {
         return patientRepository.findByEmail(email);
     }
@@ -81,7 +79,6 @@ public class PatientService {
 
         String patientAddress = URLEncoder.encode(p.getAddress() + " " + p.getCity());
         String urlForGeolocalization = GEO_API_URL + patientAddress + "&key=" + GEO_KEY;
-
         JSONObject objectForCoordinates = getRouteObject(urlForGeolocalization);
         JSONArray hits = objectForCoordinates.getJSONArray("hits");
         String pAddress = "";
