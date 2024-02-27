@@ -23,7 +23,7 @@ jobs:
       - name: Run tests
         run: npm run test-headless
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@main
+        uses: SonarSource/sonarcloud-github-action@master
         with:
           args: >
             -Dsonar.organization=ella-dee
