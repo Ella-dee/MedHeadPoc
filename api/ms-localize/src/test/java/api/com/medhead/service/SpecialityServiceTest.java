@@ -66,15 +66,15 @@ class SpecialityServiceTest {
 
     @Test
     void findOneById() {
-        when(specialityRepositoryMock.findOneById(speciality0.getId())).thenReturn(speciality0);
-        Speciality speciality = specialityRepositoryMock.findOneById(speciality0.getId());
+        when(specialityService.findOneById(speciality0.getId())).thenReturn(speciality0);
+        Speciality speciality = specialityService.findOneById(speciality0.getId());
         assertEquals(speciality.getName(), speciality_name_test);
     }
 
     @Test
     void getSpecialityByName() {
-        when(specialityRepositoryMock.findByName(speciality0.getName())).thenReturn(speciality0);
-        Speciality speciality = specialityRepositoryMock.findByName(speciality0.getName());
+        when(specialityService.getSpecialityByName(speciality0.getName())).thenReturn(speciality0);
+        Speciality speciality = specialityService.getSpecialityByName(speciality0.getName());
         assertEquals(speciality.getName(), speciality_name_test);
     }
 
@@ -84,6 +84,13 @@ class SpecialityServiceTest {
         List<Speciality> specialities = specialityService.getSpecialities();
         assertEquals(5, specialities.size());
         assertEquals(specialities.get(0).getName(), speciality_name_test);
+    }
+
+    @Test
+    void save() {
+        when(specialityService.save(speciality0)).thenReturn(speciality0);
+        Speciality speciality = specialityService.save(speciality0);
+        assertEquals(3, speciality.getId());
     }
 
     @Test

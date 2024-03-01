@@ -169,7 +169,7 @@ class UserControllerTest {
     }
 
     @Test
-    public void registerPatientInfo() throws Exception {
+    public void registerPatientInfoWithoutNumber() throws Exception {
         this.username="bluebox@badwolfbay.com";
         this.password="password";
         signupRequest = new SignupRequest();
@@ -201,6 +201,41 @@ class UserControllerTest {
         Patient patient = patientService.getPatient(getRegisteredUser(this.username).getId());
         assertEquals(51.532844, patient.getLatitude());
         assertEquals(-0.194594, patient.getLongitude());
+    }
+
+    @Test
+    public void registerPatientInfoWithNumber() throws Exception {
+        this.username="winter@iscoming.com";
+        this.password="password";
+        signupRequest = new SignupRequest();
+        signupRequest.setUsername(username);
+        signupRequest.setPassword(password);
+        this.authController.registerUser(signupRequest);
+
+        registerInfoRequest = new RegisterInfoRequest();
+        registerInfoRequest.setAddress("23 Smith Street");
+        registerInfoRequest.setCity("London");
+        registerInfoRequest.setFirstName("Ned");
+        registerInfoRequest.setLastName("Stark");
+        registerInfoRequest.setPostCode("SW3 4EW");
+        registerInfoRequest.setPhone("097379200348");
+        registerInfoRequest.setNhsNumber("ZZZZ875");
+        registerInfoRequest.setEmail(this.username);
+        registerInfoRequest.setBirthdate(date1);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post(UserController.PATH+"/patient")
+                        .content(objectMapper.writeValueAsString(registerInfoRequest))
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                // THEN
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        Patient patient = patientService.getPatient(getRegisteredUser(this.username).getId());
+        assertEquals(51.48864, patient.getLatitude());
+        assertEquals(-0.162577, patient.getLongitude());
     }
     @Test
     public void registerPatientInfo_KO() throws Exception {
@@ -235,5 +270,39 @@ class UserControllerTest {
         String message = result.getResponse().getContentAsString();
         assertTrue(message.contains("PSQLException: ERROR: duplicate key value violates unique constraint"));
         assertTrue(message.contains("Key (ssnumber)=(ZZ361112T) already exists"));
+    }
+
+    @Test
+    public void registerPatientInfo_KO_Address() throws Exception {
+        this.username="imaginary@adress.com";
+        this.password="password";
+        signupRequest = new SignupRequest();
+        signupRequest.setUsername(username);
+        signupRequest.setPassword(password);
+        this.authController.registerUser(signupRequest);
+
+        registerInfoRequest = new RegisterInfoRequest();
+        registerInfoRequest.setAddress("Imaginary Road");
+        registerInfoRequest.setCity("London");
+        registerInfoRequest.setFirstName("Imaginary");
+        registerInfoRequest.setLastName("Name");
+        registerInfoRequest.setPostCode("SJ5 8UW");
+        registerInfoRequest.setPhone("097379200348");
+        registerInfoRequest.setNhsNumber("ZZ361112X");
+        registerInfoRequest.setEmail(this.username);
+        registerInfoRequest.setBirthdate(date1);
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders
+                        .post(UserController.PATH+"/patient")
+                        .content(objectMapper.writeValueAsString(registerInfoRequest))
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                // THEN
+                .andExpect(MockMvcResultMatchers.status().is(400))
+                .andReturn();
+        String message = result.getResponse().getContentAsString();
+        assertTrue(message.contains("The address could not be geolocalized"));
     }
 }

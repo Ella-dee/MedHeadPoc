@@ -40,7 +40,7 @@ Pour les exécuter en local:
 1. Lancer Docker
 2. Se rendre dans l'arborescence racine API du projet dans l'IDE, lancer la commande suivante:
 ```bash
-   mvn tests
+   mvn test
    ```
 ### Front End (APP)
 Se rendre dans l'arborescence racine APP du projet dans l'IDE, lancer la commande suivante:
