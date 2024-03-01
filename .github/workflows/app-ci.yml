@@ -1,4 +1,4 @@
-name: Java CI/CD for frontend
+name: angular ci - app
 on:
   push:
     branches:
