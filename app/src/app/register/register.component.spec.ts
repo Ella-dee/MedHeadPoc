@@ -1,18 +1,38 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RegisterComponent } from './register.component';
-import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { AuthService } from '../_services/auth.service';
+import { RouterTestingModule } from '@angular/router/testing';
+import { MockService } from '../utils/mock-service.spec';
+import { Router } from '@angular/router';
+import { of } from 'rxjs';
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
   let fixture: ComponentFixture<RegisterComponent>;
+  let authService;
+  let router: Router;
+
+  beforeEach(() => {
+    authService = MockService.mock('AuthService', ['login', 'register']);
+    router = MockService.mock('Router', ['navigate']);
+  });
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [RegisterComponent],
-      imports: [HttpClientModule, FormsModule],
-    });
+      providers: [
+        { provide: AuthService, useValue: authService },
+        { provide: Router, useValue: router }
+      ],
+      imports: [RouterTestingModule]
+    }).overrideComponent(RegisterComponent, {
+      // Setter le template à la valeur '' pour nepas gérer le code html.
+      // On se concentre uniquement sur la logique métier.
+      set: {
+        template: ''
+      }
+    }).compileComponents();
     fixture = TestBed.createComponent(RegisterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -22,19 +42,16 @@ describe('RegisterComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('form should be invalid', () => {
-    expect(component.form.valid).toBeFalsy();
-});
+  it('register new user', () => {
+    // GIVEN
+    authService.register.and.returnValue(of({}));
+    component.onSubmit();
 
-it('should submit the form when the submit button is clicked', () => {
-  const compiled = fixture.debugElement.nativeElement;
-  const btnEl = compiled.querySelector('#submit-btn');
-  const fnc = spyOn(component, 'onSubmit');
+    // WHEN
+    fixture.detectChanges();
 
-  btnEl.click();
-  fixture.detectChanges();
-
-  expect(fnc).toHaveBeenCalled();
-})
-
+    // THEN
+    expect(authService.register).toHaveBeenCalledTimes(1);
+    expect(router.navigate).toHaveBeenCalledTimes(1);
+  });
 });

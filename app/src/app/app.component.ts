@@ -18,6 +18,7 @@ export class AppComponent implements OnInit {
   registeredUser!: any;
   patient!: any;
   private readonly unsubscribe$ = new Subject();
+  title: string = 'app';
 
   constructor(private tokenStorageService: TokenStorageService, private userService: UserService,library: FaIconLibrary, private router: Router) { 
     library.addIcons(faUser);

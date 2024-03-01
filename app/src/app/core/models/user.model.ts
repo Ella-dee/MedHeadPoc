@@ -12,4 +12,5 @@ export class User {
   email!: string;
   socialSecurityNumber!: string;
   userId!: number;
+  roles: string [] = [];
   }
