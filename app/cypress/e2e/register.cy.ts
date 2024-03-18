@@ -36,6 +36,6 @@ describe('Patient Register', () => {
     cy.contains('020 7287 7323')
     cy.contains('41 Carnaby St')
     cy.contains('W1V 1PD')
-    cy.contains('London')  
+    cy.contains('London')
   })
 })

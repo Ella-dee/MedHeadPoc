@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { BookingComponent } from './booking.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -31,7 +30,6 @@ describe('BookingComponent', () => {
 
 /*
 import { ComponentFixture, TestBed, getTestBed } from '@angular/core/testing';
-
 import { BookingComponent } from './booking.component';
 import { UserService } from '../_services/user.service';
 import { TokenStorageService } from '../_services/token-storage.service';
@@ -43,7 +41,7 @@ import { Specialty } from '../core/models/specialty';
 import { MatDialog } from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
 
-describe('BookingComponent', () => {
+fdescribe('BookingComponent', () => {
   let component: BookingComponent;
   let fixture: ComponentFixture<BookingComponent>;
   let userService: UserService;
