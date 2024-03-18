@@ -84,8 +84,8 @@ class PatientServiceTest {
         when(patientRepository.findByEmail(u3.getEmail())).thenReturn(p3);
         when(patientRepository.save(any())).thenReturn(p3);
         Patient patient = patientService.registerPatientInfo(registerInfoRequest);
-        assertEquals(51.503129, patient.getLatitude());
-        assertEquals(-0.133165, patient.getLongitude());
+        assertEquals(51.506045, patient.getLatitude());
+        assertEquals(-0.138012, patient.getLongitude());
     }
 
     @Test

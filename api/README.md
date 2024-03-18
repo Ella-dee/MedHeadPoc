@@ -3,7 +3,7 @@
 Ce repository est une Proof Of Concept (POC) pour vérifier la faisabilité d'une création d'un service de rendes-vous d'urgence pour trouver l'hôpital le plus proche d'une position donnée avec un lit disponible dans une spécialité donnée.
 
 ## Prérequis au projet
-Afin de pouvoir exécuter l'application sur votre poste, vous devez d'abord installer les dépendances suivantes :
+Afin de pouvoir exécuter l'application sur votre poste, vous devez d'abord installer les composants suivant :
 * JVM version 17
 * Apache Maven 3.9.1
 * Angular 3.16
@@ -14,13 +14,25 @@ Afin de pouvoir exécuter l'application sur votre poste, vous devez d'abord inst
 Créer une nouvelle base de données sous PgAdmin nommée 'medhead-users'.
 Créer une nouvelle base de données sous PgAdmin nommée 'medhead-hospitals'.
 
-### Execution
+### Execution avec IDE
 1. Dans l'éditeur de code Java, lancer les applications 'MsUsersApplication' et 'MsLocalizeApplication'.
 2. Dans un autre terminal, se rendre à la racine de l'application front 'app', lancer la commande suivante :
 ```bash
 npm run start
 ```
 3. Dans le navigateur, se rendre à l'adresse localhost:4200
+### Compilation du projet
+1. Démarrer Docker
+2. Dans l'éditeur de code Java, se placer à la racine de chaque microservice et lancer la commande:
+```bash
+mvn clean package
+```
+Les microservices sont packagés en .jar dans le dossier 'target'.
+3. Dans un autre terminal, se rendre à la racine de l'application front 'app', lancer la commande suivante :
+```bash
+npm run build
+```
+L'application est compilée en plusieurs fichiers .js dans le dossier 'dist'.
 
 ### Utilisation
 Parcours utilisateur:
@@ -41,14 +53,18 @@ Pour les exécuter en local:
 2. Se rendre dans l'arborescence racine API du projet dans l'IDE, lancer la commande suivante:
 ```bash
    mvn test
-   ```
+```
 ### Front End (APP)
 Se rendre dans l'arborescence racine APP du projet dans l'IDE, lancer la commande suivante:
 ```bash
-   ng test
+   npm run test
 ```
-Pour les tests E2E lancer la commande suivante:
+Pour les tests E2E, il faut démarrer les deux microservices Springboot et l'application front.
+Puis dans un terminal à la racine de l'application front end lancer les commandes suivantes:
 ```bash
-   npx cypress open
+   npx cypress open //ouvre l'interface cypress
+   npx cypress run --browser chrome //lance cypress et ses résultats dans la console
 ```
+Choisir "E2E Testing" et un navigateur.
+
 
