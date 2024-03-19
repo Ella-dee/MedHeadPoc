@@ -30,8 +30,9 @@ jobs:
             -Dsonar.projectKey=ella-dee_app
             -Dsonar.sources=app/src
             -Dsonar.tests=app/src
-            -Dsonar.typescript.lcov.reportPaths=coverage/app/lcov-report/lcov.info
-            -Dsonar.exclusions=node_modules/**,assets/**,*.spec.ts
+            -Dsonar.typescript.lcov.reportPaths=app/coverage/lcov-report/lcov.info
+            -Dsonar.exclusions=node_modules/**,assets/**
+            -Dsonar.coverage.exclusions=*.spec.ts
             -Dsonar.test.inclusions=*.spec.ts
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_APP }}
