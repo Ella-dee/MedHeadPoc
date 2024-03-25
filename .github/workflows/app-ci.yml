@@ -27,6 +27,7 @@ jobs:
         with:
           args: >
             -Dsonar.organization=ella-dee
+            -Dsonar.host.url=https://sonarcloud.io
             -Dsonar.projectKey=ella-dee_app
             -Dsonar.sources=app/src
             -Dsonar.tests=app/src
