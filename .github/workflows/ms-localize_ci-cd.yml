@@ -29,3 +29,9 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_LOCALIZE }}
         run: mvn verify sonar:sonar -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=ella-dee -Dsonar.projectKey=ella-dee_ms-localize
+
+      - name: Upload artifact
+          uses: actions/upload-artifact@v1
+          with:
+            name: artifact
+            path: ./target/ms-localize-0.0.1-SNAPSHOT.jar

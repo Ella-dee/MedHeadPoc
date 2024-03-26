@@ -30,3 +30,9 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_USERS }}
         run: mvn verify sonar:sonar -Dsonar.projectKey=ella-dee_ms-users
+
+      - name: Upload artifact
+          uses: actions/upload-artifact@v1
+          with:
+            name: artifact
+            path: ./target/ms-users-0.0.1-SNAPSHOT.jar
