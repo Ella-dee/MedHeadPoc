@@ -35,4 +35,4 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: artifact
-          path: ./target/ms-users-0.0.1-SNAPSHOT.jar
+          path: ./api/ms-users/target/ms-users-0.0.1-SNAPSHOT.jar
