@@ -22,7 +22,9 @@ Créer une nouvelle base de données sous PgAdmin nommée 'medhead-hospitals'.
 npm run start
 ```
 3. Dans le navigateur, se rendre à l'adresse localhost:4200
-### Compilation du projet
+
+### Execution avec artefacts
+#### Compilation du projet en local
 1. Démarrer Docker
 2. Dans l'éditeur de code Java, se placer à la racine de chaque microservice et lancer la commande:
 ```bash
@@ -34,6 +36,19 @@ Les microservices sont packagés en .jar dans le dossier 'target'.
 npm run build
 ```
 L'application est compilée en plusieurs fichiers .js dans le dossier 'dist'.
+#### Téléchargement des artefacts
+1. Dans github Actions, se rendre dans les builds de ms-users et ms-localize et récupérer les artifacts. 
+2. Les dézipper dans un répertoire.
+#### Lancement des artefacts
+1. Ouvrir deux terminaux à la racine où se trouvent les jar des microservices java
+2. Lancer les commandes suivantes:
+```bash
+java -jar NOMduJAR.jar
+```
+3. Dans un autre terminal se rendre à la racine du front, lancer la commande suivante:
+```bash
+npm run start
+```
 
 ### Utilisation
 Parcours utilisateur:
